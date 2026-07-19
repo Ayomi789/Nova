@@ -4,6 +4,10 @@ from pathlib import Path
 ROOT = Path(__file__).parent.parent
 CONFIG = ROOT / "config"
 
+SETTINGS_FILE = CONFIG / "settings.json"
+MODELS_FILE = CONFIG / "models.json"
+SECRETS_FILE = CONFIG / "secrets.json"
+
 
 def load(filename):
     """Load a JSON configuration file."""

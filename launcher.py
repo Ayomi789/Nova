@@ -1,3 +1,5 @@
+import sys
+
 from scripts.config import load_settings
 from scripts.checks import (
     check_python,
@@ -5,6 +7,7 @@ from scripts.checks import (
     check_api_key,
 )
 from scripts.launcher import launch
+from scripts.command import models, use
 
 
 def banner():
@@ -16,6 +19,26 @@ def banner():
 def main():
     banner()
 
+    # Handle CLI commands
+    if len(sys.argv) > 1:
+        command = sys.argv[1].lower()
+
+        if command == "models":
+            models()
+            return
+
+        if command == "use":
+            if len(sys.argv) < 3:
+                print("Usage: nova use <model>")
+                return
+
+            use(sys.argv[2])
+            return
+
+        print(f"❌ Unknown command: {command}")
+        return
+
+    # Normal launcher
     if not check_python():
         print("❌ Python not installed.")
         return

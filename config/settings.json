@@ -1,5 +1,5 @@
 {
-    "default_model": "z-ai/glm-5.2",
+    "default_model": "nvidia/llama-3.3-nemotron-super-49b-v1.5",
     "proxy_host": "127.0.0.1",
     "proxy_port": 8787,
     "python": "python",

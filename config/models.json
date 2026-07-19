@@ -3,6 +3,7 @@
         "glm": "z-ai/glm-5.2",
         "qwen": "qwen/qwen3.5-397b-a17b",
         "nemotron": "nvidia/llama-3.3-nemotron-super-49b-v1.5",
-        "step": "stepfun-ai/step-3.7-flash"
+        "step": "stepfun-ai/step-3.7-flash",
+        "minimax": "minimaxai/minimax-m3"
     }
 }
