@@ -23,9 +23,14 @@ def check_claude():
 
 
 def check_api_key():
+
     try:
         secrets = load_secrets()
-        key = secrets.get("nvidia_api_key", "").strip()
+
+        nvidia = secrets.get("nvidia", {})
+        key = nvidia.get("api_key", "").strip()
+
         return key.startswith("nvapi-")
+
     except Exception:
         return False

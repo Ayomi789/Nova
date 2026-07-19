@@ -7,7 +7,14 @@ from scripts.checks import (
     check_api_key,
 )
 from scripts.launcher import launch
-from scripts.command import models, use
+from scripts.command import (
+    models,
+    providers,
+    provider,
+    use,
+    current,
+    doctor,
+)
 
 
 def banner():
@@ -27,12 +34,32 @@ def main():
             models()
             return
 
+        if command == "providers":
+            providers()
+            return
+
+        if command == "provider":
+            if len(sys.argv) == 2:
+                provider()
+                return
+
+            provider(sys.argv[2])
+            return
+
         if command == "use":
             if len(sys.argv) < 3:
                 print("Usage: nova use <model>")
                 return
 
             use(sys.argv[2])
+            return
+
+        if command == "current":
+            current()
+            return
+
+        if command == "doctor":
+            doctor()
             return
 
         print(f"❌ Unknown command: {command}")
