@@ -1,0 +1,7 @@
+{
+    "default_model": "z-ai/glm-5.2",
+    "proxy_host": "127.0.0.1",
+    "proxy_port": 8787,
+    "python": "python",
+    "debug": true
+}
