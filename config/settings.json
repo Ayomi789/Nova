@@ -1,9 +1,8 @@
 {
     "provider": "nvidia",
-    "default_model": "stepfun-ai/step-3.7-flash",
+    "default_model": "minimaxai/minimax-m3",
     "proxy_host": "127.0.0.1",
     "proxy_port": 8787,
     "python": "python",
     "debug": true
-    
 }

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "nova-ai"
-version = "0.1.0"
+version = "0.2.0"
 description = "Nova AI Launcher"
 requires-python = ">=3.10"
 
@@ -15,4 +15,7 @@ nova = "launcher:main"
 py-modules = ["launcher"]
 
 [tool.setuptools.packages.find]
-include = ["scripts"]
+include = [
+    "scripts",
+    "launchers",
+]

@@ -1,3 +1,4 @@
+import json
 from pathlib import Path
 
 from scripts.config import (
@@ -15,6 +16,7 @@ from scripts.checks import (
 
 
 def models():
+
     data = load_models()
     settings = load_settings()
 
@@ -22,12 +24,15 @@ def models():
 
     print("\nAvailable Models\n")
 
-    for alias, model in data["models"].items():
-        marker = "★" if model == current_model else " "
-        print(f"{marker} {alias:<10} -> {model}")
+    for alias, info in data["models"].items():
+
+        marker = "★" if info["id"] == current_model else " "
+
+        print(f"{marker} {alias:<10} -> {info['id']}")
 
 
 def providers():
+
     data = load_providers()
     settings = load_settings()
 
@@ -36,7 +41,9 @@ def providers():
     print("\nAvailable Providers\n")
 
     for alias, provider in data["providers"].items():
+
         marker = "★" if alias == current_provider else " "
+
         print(f"{marker} {alias:<12} -> {provider['name']}")
 
 
@@ -50,33 +57,38 @@ def use(alias):
 
     settings = load_settings()
 
-    settings["default_model"] = models_data[alias]
+    settings["default_model"] = models_data[alias]["id"]
 
     save_settings(settings)
 
     print("✅ Default model updated\n")
     print(f"Alias : {alias}")
-    print(f"Model : {models_data[alias]}")
+    print(f"Model : {models_data[alias]['id']}")
 
 
 def current():
 
     settings = load_settings()
     models_data = load_models()["models"]
+    providers_data = load_providers()["providers"]
 
     current_model = settings["default_model"]
     current_alias = "Unknown"
 
-    for alias, model in models_data.items():
-        if model == current_model:
+    for alias, info in models_data.items():
+
+        if info["id"] == current_model:
             current_alias = alias
             break
+
+    provider_alias = settings["provider"]
+    provider_name = providers_data[provider_alias]["name"]
 
     print("\nCurrent Configuration\n")
 
     print(f"Alias      : {current_alias}")
     print(f"Model      : {current_model}")
-    print(f"Provider   : {settings['provider']}")
+    print(f"Provider   : {provider_name}")
     print(f"Proxy Host : {settings['proxy_host']}")
     print(f"Proxy Port : {settings['proxy_port']}")
 
@@ -85,22 +97,19 @@ def doctor():
 
     settings = load_settings()
     models_data = load_models()
+    providers_data = load_providers()["providers"]
 
     print("\nNova Doctor\n")
 
-    # Python
     print("Python")
     print("✓ Found" if check_python() else "✗ Not Found")
 
-    # Claude Code
     print("\nClaude Code")
     print("✓ Found" if check_claude() else "✗ Not Found")
 
-    # NVIDIA API
     print("\nNVIDIA API Key")
     print("✓ Loaded" if check_api_key() else "✗ Missing")
 
-    # Configuration
     print("\nConfiguration")
 
     config_dir = Path(__file__).parent.parent / "config"
@@ -111,27 +120,30 @@ def doctor():
         "providers.json",
         "secrets.json",
     ):
+
         if (config_dir / filename).exists():
             print(f"✓ {filename}")
         else:
             print(f"✗ {filename}")
 
-    # Current Model
-    print("\nCurrent Model")
-
     current_model = settings["default_model"]
     current_alias = "Unknown"
 
-    for alias, model in models_data["models"].items():
-        if model == current_model:
+    for alias, info in models_data["models"].items():
+
+        if info["id"] == current_model:
             current_alias = alias
             break
 
-    print(f"Provider : {settings['provider']}")
+    provider_alias = settings["provider"]
+    provider_name = providers_data[provider_alias]["name"]
+
+    print("\nCurrent Model")
+
+    print(f"Provider : {provider_name}")
     print(f"Alias    : {current_alias}")
     print(f"Model    : {current_model}")
 
-    # Proxy
     print("\nProxy")
 
     print(f"Host : {settings['proxy_host']}")
@@ -140,15 +152,11 @@ def doctor():
     print("\n✓ Doctor completed successfully.")
 
 
-
-
-
 def provider(alias=None):
 
     providers_data = load_providers()["providers"]
     settings = load_settings()
 
-    # Show current provider
     if alias is None:
 
         current = settings["provider"]
@@ -162,7 +170,6 @@ def provider(alias=None):
 
         return
 
-    # Change provider
     if alias not in providers_data:
         print(f"❌ Unknown provider: {alias}")
         return
@@ -173,3 +180,60 @@ def provider(alias=None):
 
     print("✅ Provider updated\n")
     print(f"Provider : {providers_data[alias]['name']}")
+
+
+def history():
+
+    cache_dir = Path(__file__).parent.parent / "cache"
+    benchmark_file = cache_dir / "benchmark.json"
+
+    if not benchmark_file.exists():
+        print("\nNo benchmark history found.")
+        return
+
+    try:
+
+        with open(benchmark_file, "r", encoding="utf-8") as f:
+            history = json.load(f)
+
+    except Exception:
+
+        print("\nUnable to read benchmark history.")
+        return
+
+    if not history:
+
+        print("\nNo benchmark history found.")
+        return
+
+    providers = load_providers()["providers"]
+
+    print("\nBenchmark History\n")
+
+    for item in history:
+
+        timestamp = item["timestamp"].replace("T", " ")
+
+        provider_alias = item["provider"]
+        provider_name = providers.get(
+            provider_alias,
+            {}
+        ).get("name", provider_alias)
+
+        print(timestamp)
+        print(f"Provider : {provider_name}")
+
+        print("\n🏆 Ranking")
+
+        ranking = sorted(
+            item["results"].items(),
+            key=lambda x: x[1]
+        )
+
+        for index, (model, latency) in enumerate(ranking, start=1):
+
+            print(f"{index}. {model:<10} {latency} ms")
+
+        print()
+
+    print(f"Total Benchmarks : {len(history)}")
