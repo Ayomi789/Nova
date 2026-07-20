@@ -1,8 +1,8 @@
-import random
-import time
 import json
 from pathlib import Path
 from datetime import datetime
+
+from clients.nvidia import NvidiaClient
 
 from scripts.config import (
     load_models,
@@ -11,38 +11,86 @@ from scripts.config import (
 )
 
 
-def benchmark():
+def benchmark(runs=3, warmup=True):
 
     settings = load_settings()
-    models = load_models()["models"]
-    providers = load_providers()["providers"]
 
-    provider = settings["provider"]
+    provider_alias = settings["provider"]
+
+    providers = load_providers()["providers"]
+    models = load_models()["models"]
 
     print("\nNova Benchmark\n")
+    print(f"Provider : {providers[provider_alias]['name']}")
+    print(f"Runs     : {runs}")
 
-    print(f"Provider : {providers[provider]['name']}")
-    print("\nTesting...\n")
+    if warmup:
+        print("Warm-up  : Enabled")
 
-    results = {}
+    print()
 
-    for alias in models:
+    if provider_alias != "nvidia":
+        print("❌ Real benchmark currently supports only NVIDIA.")
+        return
 
-        time.sleep(0.15)
+    client = NvidiaClient()
 
-        latency = random.randint(350, 900)
+    benchmark_results = {}
 
-        results[alias] = latency
+    fastest_model = None
+    fastest_latency = None
 
-        print(f"{alias:<10} {latency} ms")
+    for alias, info in models.items():
 
-    fastest = min(results, key=results.get)
+        print("=" * 50)
+        print(f"Benchmarking {alias}")
+        print("=" * 50)
 
-    print("\nFastest Model\n")
+        if warmup:
 
-    print(f"★ {fastest} ({results[fastest]} ms)")
+            print("\nWarm-up...", end=" ")
 
-    # Save benchmark history
+            try:
+                client._request(info["id"])
+                print("Done")
+            except Exception:
+                print("Skipped")
+
+        result = client.benchmark(
+            info["id"],
+            runs=runs,
+        )
+
+        if not result["success"]:
+            print("❌ Benchmark failed.\n")
+            continue
+
+        benchmark_results[alias] = result
+
+        avg = result["average_ms"]
+
+        print()
+        print(f"Average      : {avg} ms")
+        print(f"Median       : {result['median_ms']} ms")
+        print(f"Best         : {result['best_ms']} ms")
+        print(f"Worst        : {result['worst_ms']} ms")
+        print(f"Success Rate : {result['success_rate']}%")
+        print()
+
+        if fastest_latency is None or avg < fastest_latency:
+            fastest_latency = avg
+            fastest_model = alias
+
+    if not benchmark_results:
+        print("❌ No successful benchmarks.")
+        return
+
+    print("=" * 50)
+    print("Fastest Model")
+    print("=" * 50)
+
+    print(f"★ {fastest_model} ({fastest_latency} ms)")
+
     cache_dir = Path(__file__).parent.parent / "cache"
     cache_dir.mkdir(exist_ok=True)
 
@@ -57,9 +105,11 @@ def benchmark():
     history.append(
         {
             "timestamp": datetime.now().isoformat(timespec="seconds"),
-            "provider": provider,
-            "results": results,
-            "fastest": fastest,
+            "provider": provider_alias,
+            "runs": runs,
+            "warmup": warmup,
+            "results": benchmark_results,
+            "fastest": fastest_model,
         }
     )
 

@@ -1,8 +1,9 @@
 {
     "provider": "nvidia",
-    "default_model": "minimaxai/minimax-m3",
+    "default_model": "glm",
     "proxy_host": "127.0.0.1",
     "proxy_port": 8787,
     "python": "python",
-    "debug": true
+    "debug": true,
+    "preference": "balanced"
 }

@@ -15,7 +15,9 @@ nova = "launcher:main"
 py-modules = ["launcher"]
 
 [tool.setuptools.packages.find]
+where = ["."]
 include = [
-    "scripts",
-    "launchers",
+    "scripts*",
+    "launchers*",
+    "clients*",
 ]
