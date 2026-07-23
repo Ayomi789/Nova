@@ -13,16 +13,7 @@ from scripts.checks import (
     check_api_key,
 )
 
-from launchers.nvidia import launch as nvidia_launch
-from launchers.openrouter import launch as openrouter_launch
-from launchers.ollama import launch as ollama_launch
-
-
-LAUNCHERS = {
-    "nvidia": nvidia_launch,
-    "openrouter": openrouter_launch,
-    "ollama": ollama_launch,
-}
+from launchers.manager import get_provider
 
 
 def banner():
@@ -42,73 +33,62 @@ def handle_commands():
     handler = COMMANDS.get(command)
 
     if handler is None:
-        print(f"❌ Unknown command: {command}")
+        print(f"Unknown command: {command}")
         return True
 
     handler(args)
-
     return True
 
 
-def validate_environment():
+def startup_checks():
 
-    if not check_python():
-        print("❌ Python not installed.")
+    banner()
+
+    if check_python():
+        print("✅ Python detected")
+    else:
+        print("❌ Python not detected")
         return False
 
-    print("✅ Python detected")
-
-    if not check_claude():
-        print("❌ Claude Code not found.")
+    if check_claude():
+        print("✅ Claude Code detected")
+    else:
+        print("❌ Claude Code not detected")
         return False
 
-    print("✅ Claude Code detected")
-
-    if not check_api_key():
-        print("❌ NVIDIA API key missing.")
+    if check_api_key():
+        print("✅ API key loaded")
+    else:
+        print("❌ API key missing")
         return False
-
-    print("✅ NVIDIA API key loaded")
-
-    return True
-
-
-def launch_provider():
 
     settings = load_settings()
 
-    provider_name = settings["provider"]
+    provider = get_provider()
 
-    model_alias = settings["default_model"]
+    model = get_model(
+        settings["default_model"]
+    )
 
-    model = get_model(model_alias)
-
-    launcher = LAUNCHERS.get(provider_name)
-
-    if launcher is None:
-        print(f"❌ Unknown provider: {provider_name}")
-        return
-
-    print(f"✅ Provider : {provider_name}")
-    print(f"✅ Alias    : {model_alias}")
+    print(f"✅ Provider : {settings['provider']}")
+    print(f"✅ Alias    : {settings['default_model']}")
     print(f"✅ Model    : {model['id']}")
 
-    print("\n🚀 Launching Claude Code...\n")
+    print()
+    print("🚀 Launching Claude Code...")
+    print()
 
-    launcher(model["id"])
+    provider.launch(model["id"])
+
+    return True
 
 
 def main():
 
-    banner()
-
     if handle_commands():
         return
 
-    if not validate_environment():
-        return
-
-    launch_provider()
+    startup_checks()
 
 
 if __name__ == "__main__":

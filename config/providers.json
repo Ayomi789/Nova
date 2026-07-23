@@ -3,17 +3,19 @@
         "nvidia": {
             "name": "NVIDIA NIM",
             "base_url": "https://integrate.api.nvidia.com/v1",
-            "requires_api_key": true
+            "chat_endpoint": "/chat/completions"
         },
+
         "openrouter": {
             "name": "OpenRouter",
             "base_url": "https://openrouter.ai/api/v1",
-            "requires_api_key": true
+            "chat_endpoint": "/chat/completions"
         },
+
         "ollama": {
             "name": "Ollama",
-            "base_url": "http://localhost:11434/v1",
-            "requires_api_key": false
+            "base_url": "http://localhost:11434",
+            "chat_endpoint": "/api/chat"
         }
     }
 }

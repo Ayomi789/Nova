@@ -4,17 +4,12 @@
       "id": "z-ai/glm-5.2",
       "provider": "nvidia",
       "description": "Powerful reasoning and multimodal model",
-
       "strength": 94,
-
       "coding": 90,
       "reasoning": 98,
       "vision": 95,
-
       "speed_class": "medium",
-
       "context": 128000,
-
       "recommended_for": [
         "reasoning",
         "research",
@@ -27,17 +22,12 @@
       "id": "qwen/qwen3.5-397b-a17b",
       "provider": "nvidia",
       "description": "Balanced flagship model",
-
       "strength": 91,
-
       "coding": 88,
       "reasoning": 90,
       "vision": 92,
-
       "speed_class": "fast",
-
       "context": 262144,
-
       "recommended_for": [
         "general",
         "vision",
@@ -49,17 +39,12 @@
       "id": "nvidia/llama-3.3-nemotron-super-49b-v1.5",
       "provider": "nvidia",
       "description": "Advanced reasoning specialist",
-
       "strength": 96,
-
       "coding": 92,
       "reasoning": 99,
       "vision": 25,
-
       "speed_class": "medium",
-
       "context": 128000,
-
       "recommended_for": [
         "reasoning",
         "math",
@@ -71,17 +56,12 @@
       "id": "stepfun-ai/step-3.7-flash",
       "provider": "nvidia",
       "description": "Ultra fast lightweight assistant",
-
       "strength": 84,
-
       "coding": 82,
       "reasoning": 80,
       "vision": 20,
-
       "speed_class": "flash",
-
       "context": 128000,
-
       "recommended_for": [
         "speed",
         "chat",
@@ -93,22 +73,70 @@
       "id": "minimaxai/minimax-m3",
       "provider": "nvidia",
       "description": "Professional coding model",
-
       "strength": 99,
-
       "coding": 99,
       "reasoning": 94,
       "vision": 20,
-
       "speed_class": "fast",
-
       "context": 1000000,
-
       "recommended_for": [
         "coding",
         "agents",
         "planning",
         "debugging"
+      ]
+    },
+
+    "deepseek-flash": {
+      "id": "deepseek-ai/deepseek-v4-flash",
+      "provider": "nvidia",
+      "description": "DeepSeek V4 Flash",
+      "strength": 93,
+      "coding": 92,
+      "reasoning": 92,
+      "vision": 85,
+      "speed_class": "flash",
+      "context": 128000,
+      "recommended_for": [
+        "chat",
+        "coding",
+        "speed"
+      ]
+    },
+
+    "deepseek-pro": {
+      "id": "deepseek-ai/deepseek-v4-pro",
+      "provider": "nvidia",
+      "description": "DeepSeek V4 Pro",
+      "strength": 98,
+      "coding": 98,
+      "reasoning": 98,
+      "vision": 90,
+      "speed_class": "medium",
+      "context": 128000,
+      "recommended_for": [
+        "coding",
+        "reasoning",
+        "agents",
+        "planning"
+      ]
+    },
+
+    "gpt-oss": {
+      "id": "openai/gpt-oss-120b",
+      "provider": "nvidia",
+      "description": "GPT OSS 120B",
+      "strength": 97,
+      "coding": 99,
+      "reasoning": 97,
+      "vision": 85,
+      "speed_class": "medium",
+      "context": 128000,
+      "recommended_for": [
+        "coding",
+        "agents",
+        "planning",
+        "reasoning"
       ]
     }
   }

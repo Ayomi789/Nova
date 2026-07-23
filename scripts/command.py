@@ -32,8 +32,8 @@ def models():
         ) else " "
 
         print(
-            f"{marker} {alias:<10} -> {info['id']}"
-        )
+         f"{marker} {alias:<18} {info['provider']:<10} {info['id']}"
+       )
 
 
 def providers():
@@ -53,7 +53,6 @@ def providers():
             f"{marker} {alias:<12} -> {provider['name']}"
         )
 
-
 def use(alias):
 
     models_data = load_models()["models"]
@@ -63,19 +62,20 @@ def use(alias):
         print(f"❌ Unknown model: {alias}")
         return
 
+    model = models_data[alias]
 
     settings = load_settings()
 
     settings["default_model"] = alias
+    settings["provider"] = model["provider"]
 
     save_settings(settings)
 
+    print("\n✅ Model updated\n")
 
-    print("✅ Default model updated\n")
-    print(f"Alias : {alias}")
-    print(f"Model : {models_data[alias]['id']}")
-
-
+    print(f"Alias    : {alias}")
+    print(f"Provider : {model['provider']}")
+    print(f"Model    : {model['id']}")
 def current():
 
     settings = load_settings()
@@ -125,9 +125,7 @@ def doctor():
     models_data = load_models()["models"]
     providers_data = load_providers()["providers"]
 
-
     print("\nNova Doctor\n")
-
 
     print("Python")
     print(
@@ -136,7 +134,6 @@ def doctor():
         else "✗ Not Found"
     )
 
-
     print("\nClaude Code")
     print(
         "✓ Found"
@@ -144,43 +141,50 @@ def doctor():
         else "✗ Not Found"
     )
 
+    print("\nAPI Keys")
 
-    print("\nNVIDIA API Key")
     print(
-        "✓ Loaded"
+        "✓ NVIDIA"
         if check_api_key()
-        else "✗ Missing"
+        else "✗ NVIDIA"
     )
 
-
     print("\nConfiguration")
-
 
     config_dir = (
         Path(__file__).parent.parent
         / "config"
     )
 
-
     for filename in (
         "settings.json",
-        "models.json",
         "providers.json",
         "secrets.json",
     ):
 
         if (config_dir / filename).exists():
 
-            print(
-                f"✓ {filename}"
-            )
+            print(f"✓ {filename}")
 
         else:
 
-            print(
-                f"✗ {filename}"
-            )
+            print(f"✗ {filename}")
 
+    models_dir = config_dir / "models"
+
+    if models_dir.exists():
+
+        print("✓ models/")
+
+        json_files = sorted(models_dir.glob("*.json"))
+
+        for file in json_files:
+
+            print(f"   └── {file.name}")
+
+    else:
+
+        print("✗ models/")
 
     current_model = settings.get(
         "default_model"
@@ -188,7 +192,6 @@ def doctor():
 
     alias = "Unknown"
     model_id = current_model
-
 
     for name, info in models_data.items():
 
@@ -201,41 +204,22 @@ def doctor():
             model_id = info["id"]
             break
 
-
     provider_name = providers_data[
         settings["provider"]
     ]["name"]
 
-
     print("\nCurrent Model")
 
-    print(
-        f"Provider : {provider_name}"
-    )
-
-    print(
-        f"Alias    : {alias}"
-    )
-
-    print(
-        f"Model    : {model_id}"
-    )
-
+    print(f"Provider : {provider_name}")
+    print(f"Alias    : {alias}")
+    print(f"Model    : {model_id}")
 
     print("\nProxy")
 
-    print(
-        f"Host : {settings['proxy_host']}"
-    )
+    print(f"Host : {settings['proxy_host']}")
+    print(f"Port : {settings['proxy_port']}")
 
-    print(
-        f"Port : {settings['proxy_port']}"
-    )
-
-
-    print(
-        "\n✓ Doctor completed successfully."
-    )
+    print("\n✓ Doctor completed successfully.")
 
 
 def provider(alias=None):

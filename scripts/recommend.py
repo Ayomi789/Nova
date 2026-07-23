@@ -1,8 +1,6 @@
 from scripts.config import load_models
 
-from scripts.brain import (
-    rank_models,
-)
+from scripts.brain import rank_models
 
 
 TASKS = {
@@ -15,86 +13,66 @@ TASKS = {
 }
 
 
-def recommend(task="general"):
+def recommend_model(task="general"):
 
     task = task.lower()
 
     if task not in TASKS:
-
-        print(f"❌ Unknown task: {task}")
-
-        print("\nAvailable:")
-
-        for item in TASKS:
-            print(f"• {item}")
-
-        return
-
+        return None
 
     models = load_models()["models"]
 
     ranking = rank_models()
 
-
     candidates = []
-
 
     for item in ranking:
 
         alias = item["alias"]
 
-        model = models[alias]
-
+        model = models.get(alias, {})
 
         recommended = model.get(
             "recommended_for",
             []
         )
 
-
-        capabilities = model.get(
-            "capabilities",
-            []
-        )
-
-
         speed = model.get(
-            "speed",
+            "speed_class",
             ""
         )
-
 
         match = False
 
 
         if task in recommended:
-
             match = True
 
 
-        if task in capabilities:
+        if task == "speed":
 
-            match = True
-
-
-        if task == "speed" and speed == "fast":
-
-            match = True
+            if speed in (
+                "flash",
+                "fast",
+            ):
+                match = True
 
 
         if task == "quality":
 
             if item["score"] >= 80:
-
                 match = True
 
+
+        if task == "general":
+
+            if item["score"] >= 85:
+                match = True
 
 
         if match:
 
-            candidates.append(
-                item
-            )
+            candidates.append(item)
 
 
     if not candidates:
@@ -102,48 +80,138 @@ def recommend(task="general"):
         candidates = ranking
 
 
+    if not candidates:
 
-    best = candidates[0]
-
-
-    info = models[best["alias"]]
+        return None
 
 
-    print("\nRecommendation\n")
+    return candidates[0]
+
+
+
+def recommend(task="general"):
+
+    task = task.lower()
+
+
+    if task not in TASKS:
+
+        print(f"❌ Unknown task: {task}")
+
+        print("\nAvailable:\n")
+
+        for item in TASKS:
+
+            print(f"• {item}")
+
+        return
+
+
+
+    best = recommend_model(task)
+
+
+    if best is None:
+
+        print("❌ No recommendation available.")
+
+        return
+
+
+
+    models = load_models()["models"]
+
+    info = models.get(
+        best["alias"],
+        {}
+    )
+
+
+
+    print("\n🧠 Nova Recommendation\n")
 
 
     print(
-        f"Task         : {task}"
+        f"Task        : {task}"
     )
 
 
     print(
-        f"Model        : {best['alias']}"
+        "\n🏆 Best Model\n"
     )
 
 
     print(
-        f"Description  : {info.get('description','')}"
+        f"Alias       : {best['alias']}"
     )
 
 
     print(
-        f"Provider     : {info.get('provider','unknown')}"
+        f"Provider    : {best['provider']}"
     )
 
 
-    if best["latency"]:
+    print(
+        f"Model ID    : {best['id']}"
+    )
+
+
+    print(
+        f"Description : {info.get('description','')}"
+    )
+
+
+    print(
+        "\nPerformance\n"
+    )
+
+
+    print(
+        f"Nova Score  : {best['score']}"
+    )
+
+
+    if best.get("latency") is not None:
 
         print(
-            f"Avg Latency  : {best['latency']} ms"
+            f"Latency     : {best['latency']} ms"
+        )
+
+    else:
+
+        print(
+            "Latency     : No benchmark data"
         )
 
 
     print(
-        f"Reliability  : {best['reliability']}%"
+        f"Reliability : {best['reliability']}%"
     )
 
 
     print(
-        f"Nova Score   : {best['score']}"
+        f"Context     : {info.get('context',0):,}"
     )
+
+
+    print(
+        f"Speed Class : {info.get('speed_class','unknown')}"
+    )
+
+
+    print(
+        "\nWhy this model?\n"
+    )
+
+
+    for reason in info.get(
+        "recommended_for",
+        []
+    ):
+
+        print(
+            f"• {reason}"
+        )
+
+
+    print()

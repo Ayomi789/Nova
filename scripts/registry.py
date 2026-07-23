@@ -14,6 +14,7 @@ from scripts.compare import compare
 from scripts.preference import preference
 from scripts.advisor import advisor
 from scripts.rank import rank
+from scripts.chat import chat
 
 
 def benchmark_command(args):
@@ -93,4 +94,6 @@ COMMANDS = {
     "preference": preference_command,
     "advisor": advisor_command,
     "rank": rank_command,
+    "chat": chat,
+
 }

@@ -1,5 +1,7 @@
 from launchers.base import BaseProvider
 from scripts.launcher import launch as launcher
+from scripts.provider_config import load_provider
+
 
 
 class NvidiaProvider(BaseProvider):
@@ -19,8 +21,8 @@ class NvidiaProvider(BaseProvider):
 provider = NvidiaProvider()
 
 
-def launch(model):
-    """
-    Backward compatibility.
-    """
-    return provider.launch(model)
+def launch(self, model=None):
+
+    config = load_provider()
+
+    return launcher(config["model_id"])

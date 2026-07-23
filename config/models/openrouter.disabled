@@ -1,0 +1,73 @@
+{
+  "models": {
+    "glm5": {
+      "id": "z-ai/glm-5.2",
+      "provider": "openrouter",
+      "description": "GLM 5 via OpenRouter",
+      "strength": 94,
+      "coding": 90,
+      "reasoning": 98,
+      "vision": 95,
+      "speed_class": "medium",
+      "context": 128000,
+      "recommended_for": [
+        "reasoning",
+        "research",
+        "vision"
+      ]
+    },
+
+    "deepseek-flash": {
+      "id": "deepseek/deepseek-v4-flash",
+      "provider": "openrouter",
+      "description": "DeepSeek V4 Flash",
+      "strength": 93,
+      "coding": 92,
+      "reasoning": 92,
+      "vision": 85,
+      "speed_class": "flash",
+      "context": 128000,
+      "recommended_for": [
+        "chat",
+        "coding",
+        "speed"
+      ]
+    },
+
+    "deepseek-pro": {
+      "id": "deepseek/deepseek-v4-pro",
+      "provider": "openrouter",
+      "description": "DeepSeek V4 Pro",
+      "strength": 98,
+      "coding": 98,
+      "reasoning": 98,
+      "vision": 90,
+      "speed_class": "medium",
+      "context": 128000,
+      "recommended_for": [
+        "coding",
+        "reasoning",
+        "agents",
+        "planning"
+      ]
+    },
+
+    "gpt-oss": {
+      "id": "openai/gpt-oss-120b",
+      "provider": "openrouter",
+      "description": "OpenAI GPT OSS 120B",
+      "strength": 97,
+      "coding": 99,
+      "reasoning": 97,
+      "vision": 85,
+      "speed_class": "medium",
+      "context": 128000,
+      "recommended_for": [
+        "coding",
+        "agents",
+        "planning",
+        "reasoning"
+      ]
+    }
+  }
+}
