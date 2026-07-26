@@ -5,6 +5,7 @@ from scripts.router import choose_model
 from scripts.evaluator import evaluate
 from scripts.chat_command import handle as handle_chat_command
 from scripts.personality import NOVA_SYSTEM
+from scripts.memory_detector import detect
 
 from scripts.history import (
     add as add_history,
@@ -15,6 +16,7 @@ from scripts.memory import (
     remember,
     recall,
     forget,
+    all_memories,
 )
 
 
@@ -136,6 +138,30 @@ def handle_memory(prompt):
         None,
     )
     
+    
+    
+    
+def build_memory_context():
+
+    memories = all_memories()
+
+    if not memories:
+        return ""
+
+    lines = [
+        "Known facts about the user:",
+        "",
+    ]
+
+    for key, value in memories.items():
+
+        lines.append(
+            f"• {key.title()}: {value}"
+        )
+
+    return "\n".join(lines)
+
+
     
     
 def race_models(
@@ -310,14 +336,35 @@ def chat(args=None):
             print()
 
             continue
+        
+        memory = detect(prompt)
+
+        if memory["remember"]:
+
+            remember(
+                memory["key"],
+                memory["value"],
+            )
+
+        memory_context = build_memory_context()
+
+        user_prompt = prompt
+
+        if memory_context:
+
+            user_prompt = (
+                memory_context
+                + "\n\n"
+                + prompt
+            )
 
         conversation.append(
             {
                 "role": "user",
-                "content": prompt,
+                "content": user_prompt,
             }
         )
-        
+
         add_history(
             "user",
             prompt,
@@ -366,11 +413,11 @@ def chat(args=None):
                     "content": reply,
                 }
             )
-            
+
             add_history(
-                 "assistant",
-                  reply,
-        )
+                "assistant",
+                reply,
+            )
 
             print()
 
