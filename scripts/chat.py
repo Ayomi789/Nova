@@ -6,6 +6,7 @@ from scripts.evaluator import evaluate
 from scripts.chat_command import handle as handle_chat_command
 from scripts.personality import NOVA_SYSTEM
 from scripts.memory_detector import detect
+from scripts.memory_retriever import retrieve
 
 from scripts.history import (
     add as add_history,
@@ -46,6 +47,7 @@ def build_model_list(decision):
 
         return [
             selected,
+            *get_fallbacks(decision)[:1],
         ]
 
     if confidence >= 70:
@@ -141,9 +143,9 @@ def handle_memory(prompt):
     
     
     
-def build_memory_context():
+def build_memory_context(prompt):
 
-    memories = all_memories()
+    memories = retrieve(prompt)
 
     if not memories:
         return ""
@@ -161,7 +163,6 @@ def build_memory_context():
 
     return "\n".join(lines)
 
-
     
     
 def race_models(
@@ -172,27 +173,30 @@ def race_models(
 ):
 
     def ask(model):
+            try:
 
-        try:
+                result = client.chat(
+                    model["id"],
+                    conversation,
+                    timeout=300,
+                )
 
-            result = client.chat(
-                model["id"],
-                conversation,
-                timeout=300,
-            )
+                return (
+                    model,
+                    result,
+                )
 
-            return (
-                model,
-                result,
-            )
+            except Exception as e:
 
-        except Exception as e:
+                print(
+                    f"⚠ {model['alias']} unavailable"
+                )
 
-            print(
-                f"❌ {model['alias']} failed: {e}"
-            )
+                print(
+                    f"   {e}"
+                )
 
-            return None
+                return None
 
     responses = []
 
@@ -346,7 +350,7 @@ def chat(args=None):
                 memory["value"],
             )
 
-        memory_context = build_memory_context()
+        memory_context = build_memory_context(prompt)
 
         user_prompt = prompt
 
