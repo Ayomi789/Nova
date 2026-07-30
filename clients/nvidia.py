@@ -162,6 +162,14 @@ class NvidiaClient(BaseClient):
             "stream": True,
         }
 
+        print("\n========== PAYLOAD ==========")
+
+        print(json.dumps(payload, indent=2))
+
+        print("=============================\n")
+        
+        
+        
         response = self._post(
             "/chat/completions",
             payload,

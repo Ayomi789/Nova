@@ -1,3 +1,5 @@
+import re
+
 from scripts.memory import all_memories
 
 
@@ -10,51 +12,20 @@ def retrieve(prompt):
 
     prompt = prompt.lower()
 
+    words = set(
+        re.findall(r"\w+", prompt)
+    )
+
     results = {}
 
-    keywords = {
-        "language": [
-            "language",
-            "code",
-            "coding",
-            "programming",
-            "rust",
-            "python",
-            "javascript",
-            "typescript",
-            "go",
-        ],
-        "color": [
-            "color",
-            "colour",
-            "theme",
-        ],
-        "name": [
-            "name",
-            "call me",
-            "who am i",
-        ],
-        "country": [
-            "country",
-            "where",
-            "location",
-            "live",
-            "from",
-        ],
-    }
+    for key, value in memories.items():
 
-    for memory_key, value in memories.items():
+        key_words = set(
+            re.findall(r"\w+", key.lower())
+        )
 
-        key = memory_key.lower()
+        if words & key_words:
 
-        if key not in keywords:
-            continue
-
-        for word in keywords[key]:
-
-            if word in prompt:
-
-                results[memory_key] = value
-                break
+            results[key] = value
 
     return results

@@ -1,0 +1,36 @@
+[
+    {
+        "timestamp": "2026-07-30T12:05:54.209895",
+        "task": "general",
+        "model": "step",
+        "score": 85,
+        "feedback": [
+            "Response could be more detailed",
+            "Could improve formatting",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-07-30T12:07:42.836383",
+        "task": "coding",
+        "model": "nemotron",
+        "score": 100,
+        "feedback": [
+            "Good response length",
+            "Includes code",
+            "Well structured",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-07-30T12:44:51.334992",
+        "task": "general",
+        "model": "step",
+        "score": 85,
+        "feedback": [
+            "Response could be more detailed",
+            "Could improve formatting",
+            "Relevant response"
+        ]
+    }
+]

@@ -18,21 +18,22 @@
       ]
     },
 
-    "qwen": {
-      "id": "qwen/qwen3.5-397b-a17b",
-      "provider": "nvidia",
-      "description": "Balanced flagship model",
-      "strength": 91,
-      "coding": 88,
-      "reasoning": 90,
-      "vision": 92,
-      "speed_class": "fast",
-      "context": 262144,
-      "recommended_for": [
-        "general",
-        "vision",
-        "chat"
-      ]
+    "mistral-medium": {
+          "id": "mistralai/mistral-medium-3.5-128b",
+          "provider": "nvidia",
+          "description": "Mistral Medium 3.5",
+          "strength": 96,
+          "coding": 97,
+          "reasoning": 96,
+          "vision": 88,
+          "speed_class": "medium",
+          "context": 128000,
+          "recommended_for": [
+            "coding",
+            "reasoning",
+            "planning",
+            "chat"
+          ]
     },
 
     "nemotron": {

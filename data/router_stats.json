@@ -1,0 +1,15 @@
+{
+    "coding": {
+        "nemotron": 2,
+        "minimax": 1
+    },
+    "reasoning": {
+        "minimax": 1
+    },
+    "vision": {},
+    "speed": {},
+    "general": {
+        "nemotron": 1,
+        "step": 4
+    }
+}

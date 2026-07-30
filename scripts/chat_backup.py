@@ -1,124 +1,124 @@
-from clients.nvidia import NvidiaClient
+# from clients.nvidia import NvidiaClient
 
-from scripts.config import load_models
+# from scripts.config import load_models
 
-from scripts.router import choose_model
-
-
-
-def chat(args=None):
-
-    models = load_models()["models"]
-
-    client = NvidiaClient()
-
-
-    print("\n💬 Nova Chat\n")
-
-    print("🧠 Nova Brain Routing Enabled")
-
-    print("Type 'exit' to leave.")
-    print("Type 'clear' to clear memory.\n")
-
-
-    conversation = []
-
-
-    while True:
-
-        prompt = input("You > ")
-
-
-        if prompt.lower() in (
-            "exit",
-            "quit",
-        ):
-
-            print("\nGoodbye.\n")
-
-            break
-
-
-        if prompt.lower() == "clear":
-
-            conversation = []
-
-            print("\n🧹 Memory cleared.\n")
-
-            continue
+# from scripts.router import choose_model
 
 
 
-        try:
+# def chat(args=None):
 
-            decision = choose_model(prompt)
+#     models = load_models()["models"]
 
-
-            selected = decision["model"]
-
-
-            alias = selected["alias"]
-
-            model_id = selected["id"]
+#     client = NvidiaClient()
 
 
+#     print("\n💬 Nova Chat\n")
 
-            print()
+#     print("🧠 Nova Brain Routing Enabled")
 
-            print("🧠 Nova Brain")
-
-            print(
-                f"Task    : {decision['task']}"
-            )
-
-            print(
-                f"Model   : {alias}"
-            )
-
-            print(
-                f"Score   : {selected['score']}"
-            )
-
-            print()
+#     print("Type 'exit' to leave.")
+#     print("Type 'clear' to clear memory.\n")
 
 
-
-            conversation.append(
-                {
-                    "role": "user",
-                    "content": prompt,
-                }
-            )
+#     conversation = []
 
 
-            reply = client.chat(
-                model_id,
-                conversation,
-            )
+#     while True:
+
+#         prompt = input("You > ")
 
 
-            conversation.append(
-                {
-                    "role": "assistant",
-                    "content": reply,
-                }
-            )
+#         if prompt.lower() in (
+#             "exit",
+#             "quit",
+#         ):
+
+#             print("\nGoodbye.\n")
+
+#             break
 
 
-            print("Nova >")
+#         if prompt.lower() == "clear":
 
-            print(reply)
+#             conversation = []
 
-            print()
+#             print("\n🧹 Memory cleared.\n")
+
+#             continue
 
 
 
-        except Exception as e:
+#         try:
 
-            print()
+#             decision = choose_model(prompt)
 
-            print(
-                f"❌ {e}"
-            )
 
-            print()
+#             selected = decision["model"]
+
+
+#             alias = selected["alias"]
+
+#             model_id = selected["id"]
+
+
+
+#             print()
+
+#             print("🧠 Nova Brain")
+
+#             print(
+#                 f"Task    : {decision['task']}"
+#             )
+
+#             print(
+#                 f"Model   : {alias}"
+#             )
+
+#             print(
+#                 f"Score   : {selected['score']}"
+#             )
+
+#             print()
+
+
+
+#             conversation.append(
+#                 {
+#                     "role": "user",
+#                     "content": prompt,
+#                 }
+#             )
+
+
+#             reply = client.chat(
+#                 model_id,
+#                 conversation,
+#             )
+
+
+#             conversation.append(
+#                 {
+#                     "role": "assistant",
+#                     "content": reply,
+#                 }
+#             )
+
+
+#             print("Nova >")
+
+#             print(reply)
+
+#             print()
+
+
+
+#         except Exception as e:
+
+#             print()
+
+#             print(
+#                 f"❌ {e}"
+#             )
+
+#             print()

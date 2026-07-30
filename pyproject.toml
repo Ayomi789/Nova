@@ -17,6 +17,7 @@ py-modules = ["launcher"]
 [tool.setuptools.packages.find]
 where = ["."]
 include = [
+    "brain*",
     "scripts*",
     "launchers*",
     "clients*",

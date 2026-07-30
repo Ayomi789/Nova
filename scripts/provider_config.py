@@ -32,6 +32,7 @@ def load_provider():
         secrets.get(provider_alias, {})
         .get("api_key")
     )
+    
 
     return {
         "provider": provider_alias,
