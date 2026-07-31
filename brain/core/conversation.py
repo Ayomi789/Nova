@@ -47,15 +47,14 @@ def chat_loop(client, conversation):
                 prompt,
             )
 
-            if response.get("handled"):
-                show_reply(response["reply"])
-                continue
-
-            memory = response.get("memory_result")
+            if not response.get("handled"):
+               
+                memory = response.get("memory_result")
 
             if memory:
                 show_memory(memory)
-
+                
+            
             show_reply(response["reply"])
 
         except Exception as e:

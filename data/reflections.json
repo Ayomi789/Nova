@@ -32,5 +32,116 @@
             "Could improve formatting",
             "Relevant response"
         ]
+    },
+    {
+        "timestamp": "2026-07-30T15:22:25.546227",
+        "task": "general",
+        "model": "nemotron",
+        "score": 100,
+        "feedback": [
+            "Good response length",
+            "Well structured",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-07-30T15:23:32.171981",
+        "task": "general",
+        "model": "step",
+        "score": 100,
+        "feedback": [
+            "Good response length",
+            "Well structured",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-07-30T15:26:08.609153",
+        "task": "reasoning",
+        "model": "minimax",
+        "score": 100,
+        "feedback": [
+            "Good response length",
+            "Explanation is detailed",
+            "Well structured",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-07-30T16:26:29.655501",
+        "task": "general",
+        "model": "step",
+        "score": 85,
+        "feedback": [
+            "Response could be more detailed",
+            "Could improve formatting",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-07-30T17:07:52.137467",
+        "task": "general",
+        "model": "step",
+        "score": 85,
+        "feedback": [
+            "Response could be more detailed",
+            "Could improve formatting",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-07-30T17:20:09.560406",
+        "task": "general",
+        "model": "nemotron",
+        "score": 85,
+        "feedback": [
+            "Response could be more detailed",
+            "Could improve formatting",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-07-30T17:27:46.688557",
+        "task": "general",
+        "model": "step",
+        "score": 85,
+        "feedback": [
+            "Response could be more detailed",
+            "Could improve formatting",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-07-30T17:30:15.850902",
+        "task": "coding",
+        "model": "minimax",
+        "score": 100,
+        "feedback": [
+            "Good response length",
+            "Well structured",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-07-30T17:38:25.619106",
+        "task": "coding",
+        "model": "minimax",
+        "score": 100,
+        "feedback": [
+            "Good response length",
+            "Well structured",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-07-30T17:54:26.421199",
+        "task": "coding",
+        "model": "minimax",
+        "score": 100,
+        "feedback": [
+            "Good response length",
+            "Well structured",
+            "Relevant response"
+        ]
     }
 ]
