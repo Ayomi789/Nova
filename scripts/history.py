@@ -2,7 +2,11 @@ import json
 from pathlib import Path
 
 
-HISTORY_FILE = Path("cache/history.json")
+HISTORY_FILE = (
+    Path(__file__).resolve().parent.parent
+    / "cache"
+    / "history.json"
+)
 
 
 def _load():

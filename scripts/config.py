@@ -1,6 +1,8 @@
 import json
 from pathlib import Path
 
+
+
 ROOT = Path(__file__).parent.parent
 
 CONFIG = ROOT / "config"
@@ -140,3 +142,4 @@ def set_preference(mode):
     settings["preference"] = mode
 
     save_settings(settings)
+    

@@ -1,11 +1,76 @@
 import json
 import time
 import statistics
+from dataclasses import dataclass
+
 import requests
 
 from clients.base import BaseClient
-from scripts.config import get_provider
-from scripts.cleaner import clean_response
+from scripts.config import get_provider, load_models
+
+
+@dataclass
+class _ModelMode:
+    temperature: float
+    max_tokens: int
+    timeout: int
+
+
+def _mode(model_id):
+    models = load_models()["models"]
+
+    model = next(
+        (
+            m
+            for m in models.values()
+            if m["id"] == model_id
+        ),
+        None,
+    )
+
+    if model is None:
+        return _ModelMode(
+            temperature=0.7,
+            max_tokens=2048,
+            timeout=300,
+        )
+
+    speed = model.get("speed_class", "medium")
+
+    if speed == "flash":
+        return _ModelMode(
+            temperature=0.2,
+            max_tokens=1024,
+            timeout=120,
+        )
+
+    if speed == "fast":
+        return _ModelMode(
+            temperature=0.35,
+            max_tokens=1536,
+            timeout=180,
+        )
+
+    return _ModelMode(
+        temperature=0.7,
+        max_tokens=2048,
+        timeout=300,
+    )
+
+
+def _clean(content):
+    if not content:
+        return "I couldn't generate a response."
+
+    content = content.strip()
+
+    if "</think>" in content:
+        content = content.split("</think>")[-1].strip()
+
+    if "<think>" in content:
+        content = content.split("<think>")[0].strip()
+
+    return content
 
 
 class NvidiaClient(BaseClient):
@@ -20,27 +85,49 @@ class NvidiaClient(BaseClient):
             "Content-Type": "application/json",
         }
 
-    def _post(self, endpoint, payload, timeout=120, stream=False):
+    def _post(
+        self,
+        endpoint,
+        payload,
+        timeout=120,
+        stream=False,
+        retries=3,
+    ):
         url = f"{self.base_url}{endpoint}"
-        try:
-            response = requests.post(
-                url,
-                headers=self.headers,
-                json=payload,
-                timeout=timeout,
-                stream=stream,
-            )
-        except requests.exceptions.Timeout:
-            raise Exception("Request timed out")
-        except requests.exceptions.ConnectionError:
-            raise Exception("Unable to connect to NVIDIA")
-        except requests.exceptions.RequestException as e:
-            raise Exception(str(e))
+        last_error = None
 
-        if response.status_code >= 400:
-            raise Exception(f"HTTP {response.status_code}: {response.text}")
+        for attempt in range(retries):
+            try:
+                response = requests.post(
+                    url,
+                    headers=self.headers,
+                    json=payload,
+                    timeout=timeout,
+                    stream=stream,
+                )
 
-        return response
+                if response.status_code >= 400:
+                    raise Exception(
+                        f"HTTP {response.status_code}: {response.text}"
+                    )
+
+                return response
+
+            except requests.exceptions.Timeout:
+                last_error = f"Timeout while calling {endpoint}"
+            except requests.exceptions.ConnectionError:
+                last_error = "Unable to connect to NVIDIA"
+            except requests.exceptions.RequestException as e:
+                last_error = str(e)
+            except Exception as e:
+                last_error = str(e)
+
+            if attempt < retries - 1:
+                wait = 2 ** attempt
+                
+                time.sleep(wait)
+
+        raise Exception(last_error)
 
     def _get(self, endpoint, timeout=60):
         url = f"{self.base_url}{endpoint}"
@@ -119,61 +206,52 @@ class NvidiaClient(BaseClient):
         self,
         model,
         messages,
-        temperature=0.7,
-        max_tokens=2048,
         timeout=300,
     ):
+        mode = _mode(model)
+        
+        
+        
         payload = {
             "model": model,
             "messages": messages,
-            "temperature": temperature,
-            "max_tokens": max_tokens,
-        }
+            "temperature": mode.temperature,
+            "max_tokens": mode.max_tokens,
+            }
 
         response = self._post(
             "/chat/completions",
             payload,
-            timeout=timeout,
+            timeout=mode.timeout,
         )
-
-        data = response.json()
-
-        DEBUG = False
         
-        if DEBUG:
-            print("\n========== RAW RESPONSE ==========")
-            print(json.dumps(data, indent=2))
-            print("==================================\n")
+        data = response.json()
 
         message = data["choices"][0]["message"]
 
         content = message.get("content")
 
-        return clean_response(content)
+        return _clean(content)
 
 
 
-    def stream_chat(self, model, messages, temperature=0.7, max_tokens=2048):
+    def stream_chat(self, model, messages):
+
+        mode = _mode(model)
+        
         payload = {
             "model": model,
             "messages": messages,
-            "temperature": temperature,
-            "max_tokens": max_tokens,
-            "stream": True,
+            "temperature": mode.temperature,
+            "max_tokens": mode.max_tokens,
+            # "stream": True,
         }
 
-        print("\n========== PAYLOAD ==========")
-
-        print(json.dumps(payload, indent=2))
-
-        print("=============================\n")
-        
-        
         
         response = self._post(
             "/chat/completions",
             payload,
-            timeout=300,
+            timeout=mode.timeout,
             stream=True,
         )
 

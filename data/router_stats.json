@@ -1,15 +1,22 @@
 {
     "coding": {
-        "nemotron": 2,
-        "minimax": 4
+        "nemotron": 7,
+        "minimax": 20,
+        "step": 1
     },
     "reasoning": {
-        "minimax": 2
+        "minimax": 3
     },
-    "vision": {},
+    "vision": {
+        "glm": 2,
+        "deepseek-flash": 1
+    },
     "speed": {},
     "general": {
-        "nemotron": 3,
-        "step": 8
+        "nemotron": 35,
+        "step": 36
+    },
+    "general_chat": {
+        "nemotron": 8
     }
 }

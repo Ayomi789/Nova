@@ -143,5 +143,1041 @@
             "Well structured",
             "Relevant response"
         ]
+    },
+    {
+        "timestamp": "2026-07-31T07:17:31.121100",
+        "task": "general",
+        "model": "step",
+        "score": 90,
+        "feedback": [
+            "Response could be more detailed",
+            "Well structured",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-07-31T07:58:12.327424",
+        "task": "coding",
+        "model": "minimax",
+        "score": 100,
+        "feedback": [
+            "Good response length",
+            "Well structured",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-07-31T08:01:18.250703",
+        "task": "general",
+        "model": "nemotron",
+        "score": 100,
+        "feedback": [
+            "Good response length",
+            "Well structured",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-07-31T08:07:26.858209",
+        "task": "vision",
+        "model": "glm",
+        "score": 90,
+        "feedback": [
+            "Response could be more detailed",
+            "Well structured",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-07-31T08:12:55.212152",
+        "task": "general",
+        "model": "nemotron",
+        "score": 90,
+        "feedback": [
+            "Response could be more detailed",
+            "Well structured",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-07-31T08:28:13.159081",
+        "task": "vision",
+        "model": "glm",
+        "score": 75,
+        "feedback": [
+            "Good response length",
+            "Well structured",
+            "Low keyword relevance"
+        ]
+    },
+    {
+        "timestamp": "2026-07-31T08:33:27.125528",
+        "task": "coding",
+        "model": "minimax",
+        "score": 100,
+        "feedback": [
+            "Good response length",
+            "Well structured",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-07-31T08:36:47.827213",
+        "task": "coding",
+        "model": "minimax",
+        "score": 100,
+        "feedback": [
+            "Good response length",
+            "Well structured",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-07-31T08:42:31.611347",
+        "task": "general",
+        "model": "nemotron",
+        "score": 90,
+        "feedback": [
+            "Response could be more detailed",
+            "Well structured",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-07-31T08:43:23.021315",
+        "task": "general",
+        "model": "step",
+        "score": 100,
+        "feedback": [
+            "Good response length",
+            "Well structured",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-07-31T08:45:08.785106",
+        "task": "general",
+        "model": "nemotron",
+        "score": 100,
+        "feedback": [
+            "Good response length",
+            "Well structured",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-07-31T12:20:45.168962",
+        "task": "general",
+        "model": "step",
+        "score": 65,
+        "feedback": [
+            "Response is very short",
+            "Could improve formatting",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-07-31T12:24:33.823612",
+        "task": "coding",
+        "model": "minimax",
+        "score": 100,
+        "feedback": [
+            "Good response length",
+            "Well structured",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-07-31T12:30:03.070253",
+        "task": "coding",
+        "model": "nemotron",
+        "score": 100,
+        "feedback": [
+            "Good response length",
+            "Well structured",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-07-31T12:35:14.879187",
+        "task": "vision",
+        "model": "deepseek-flash",
+        "score": 75,
+        "feedback": [
+            "Good response length",
+            "Well structured",
+            "Low keyword relevance"
+        ]
+    },
+    {
+        "timestamp": "2026-07-31T12:37:49.654703",
+        "task": "coding",
+        "model": "minimax",
+        "score": 100,
+        "feedback": [
+            "Good response length",
+            "Well structured",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-07-31T12:38:56.968571",
+        "task": "coding",
+        "model": "minimax",
+        "score": 100,
+        "feedback": [
+            "Good response length",
+            "Well structured",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-07-31T12:52:37.925454",
+        "task": "coding",
+        "model": "minimax",
+        "score": 100,
+        "feedback": [
+            "Good response length",
+            "Well structured",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-07-31T12:54:49.990349",
+        "task": "coding",
+        "model": "minimax",
+        "score": 100,
+        "feedback": [
+            "Good response length",
+            "Well structured",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-07-31T12:59:37.053664",
+        "task": "coding",
+        "model": "minimax",
+        "score": 100,
+        "feedback": [
+            "Good response length",
+            "Well structured",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-07-31T13:05:25.997092",
+        "task": "coding",
+        "model": "nemotron",
+        "score": 100,
+        "feedback": [
+            "Good response length",
+            "Well structured",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-07-31T14:08:03.378016",
+        "task": "general",
+        "model": "step",
+        "score": 85,
+        "feedback": [
+            "Response could be more detailed",
+            "Could improve formatting",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-07-31T14:11:44.490372",
+        "task": "coding",
+        "model": "minimax",
+        "score": 100,
+        "feedback": [
+            "Good response length",
+            "Well structured",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-07-31T14:16:45.822243",
+        "task": "coding",
+        "model": "nemotron",
+        "score": 100,
+        "feedback": [
+            "Good response length",
+            "Well structured",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-07-31T14:24:57.165198",
+        "task": "coding",
+        "model": "nemotron",
+        "score": 75,
+        "feedback": [
+            "Good response length",
+            "Well structured",
+            "Low keyword relevance"
+        ]
+    },
+    {
+        "timestamp": "2026-07-31T14:32:03.055748",
+        "task": "coding",
+        "model": "step",
+        "score": 100,
+        "feedback": [
+            "Good response length",
+            "Well structured",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-07-31T15:31:58.854981",
+        "task": "coding",
+        "model": "minimax",
+        "score": 100,
+        "feedback": [
+            "Good response length",
+            "Well structured",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-07-31T15:37:16.245652",
+        "task": "coding",
+        "model": "minimax",
+        "score": 100,
+        "feedback": [
+            "Good response length",
+            "Well structured",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-07-31T15:39:55.982537",
+        "task": "coding",
+        "model": "minimax",
+        "score": 100,
+        "feedback": [
+            "Good response length",
+            "Well structured",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-07-31T15:43:20.622114",
+        "task": "coding",
+        "model": "nemotron",
+        "score": 100,
+        "feedback": [
+            "Good response length",
+            "Well structured",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-07-31T16:10:02.609900",
+        "task": "coding",
+        "model": "minimax",
+        "score": 100,
+        "feedback": [
+            "Good response length",
+            "Well structured",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-07-31T16:23:47.401115",
+        "task": "coding",
+        "model": "minimax",
+        "score": 100,
+        "feedback": [
+            "Good response length",
+            "Well structured",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-07-31T17:11:34.777028",
+        "task": "general",
+        "model": "step",
+        "score": 65,
+        "feedback": [
+            "Response is very short",
+            "Could improve formatting",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-07-31T17:12:23.651122",
+        "task": "general",
+        "model": "step",
+        "score": 95,
+        "feedback": [
+            "Good response length",
+            "Could improve formatting",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-07-31T17:13:01.357646",
+        "task": "general",
+        "model": "nemotron",
+        "score": 100,
+        "feedback": [
+            "Good response length",
+            "Well structured",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-07-31T17:14:06.739478",
+        "task": "general",
+        "model": "nemotron",
+        "score": 100,
+        "feedback": [
+            "Good response length",
+            "Well structured",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-07-31T17:26:40.498251",
+        "task": "general",
+        "model": "nemotron",
+        "score": 65,
+        "feedback": [
+            "Response is very short",
+            "Could improve formatting",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-07-31T17:27:32.686823",
+        "task": "general",
+        "model": "step",
+        "score": 100,
+        "feedback": [
+            "Good response length",
+            "Well structured",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-07-31T17:28:37.867897",
+        "task": "general",
+        "model": "nemotron",
+        "score": 100,
+        "feedback": [
+            "Good response length",
+            "Well structured",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-07-31T17:29:33.144633",
+        "task": "general",
+        "model": "step",
+        "score": 100,
+        "feedback": [
+            "Good response length",
+            "Well structured",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-07-31T18:05:19.892957",
+        "task": "general",
+        "model": "step",
+        "score": 65,
+        "feedback": [
+            "Response is very short",
+            "Could improve formatting",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-07-31T18:05:57.993119",
+        "task": "general",
+        "model": "step",
+        "score": 100,
+        "feedback": [
+            "Good response length",
+            "Well structured",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-07-31T18:08:26.802211",
+        "task": "general",
+        "model": "nemotron",
+        "score": 100,
+        "feedback": [
+            "Good response length",
+            "Well structured",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-07-31T18:09:30.463593",
+        "task": "general",
+        "model": "step",
+        "score": 100,
+        "feedback": [
+            "Good response length",
+            "Well structured",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-07-31T18:12:34.422324",
+        "task": "general",
+        "model": "nemotron",
+        "score": 100,
+        "feedback": [
+            "Good response length",
+            "Well structured",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-07-31T18:13:48.988804",
+        "task": "general",
+        "model": "nemotron",
+        "score": 100,
+        "feedback": [
+            "Good response length",
+            "Well structured",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-07-31T18:27:27.469047",
+        "task": "general",
+        "model": "nemotron",
+        "score": 85,
+        "feedback": [
+            "Response could be more detailed",
+            "Could improve formatting",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-07-31T18:29:42.693197",
+        "task": "general",
+        "model": "step",
+        "score": 100,
+        "feedback": [
+            "Good response length",
+            "Well structured",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-07-31T18:30:14.359767",
+        "task": "general",
+        "model": "step",
+        "score": 100,
+        "feedback": [
+            "Good response length",
+            "Well structured",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-07-31T18:30:59.393384",
+        "task": "general",
+        "model": "nemotron",
+        "score": 100,
+        "feedback": [
+            "Good response length",
+            "Well structured",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-07-31T18:36:28.699340",
+        "task": "general",
+        "model": "step",
+        "score": 100,
+        "feedback": [
+            "Good response length",
+            "Well structured",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-07-31T18:48:52.912568",
+        "task": "reasoning",
+        "model": "minimax",
+        "score": 100,
+        "feedback": [
+            "Good response length",
+            "Explanation is detailed",
+            "Well structured",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-08-01T02:55:15.323346",
+        "task": "general",
+        "model": "nemotron",
+        "score": 100,
+        "feedback": [
+            "Good response length",
+            "Well structured",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-08-01T02:57:25.646285",
+        "task": "general",
+        "model": "nemotron",
+        "score": 100,
+        "feedback": [
+            "Good response length",
+            "Well structured",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-08-01T03:01:00.691331",
+        "task": "general",
+        "model": "step",
+        "score": 100,
+        "feedback": [
+            "Good response length",
+            "Well structured",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-08-01T03:02:36.106666",
+        "task": "general",
+        "model": "step",
+        "score": 85,
+        "feedback": [
+            "Response could be more detailed",
+            "Could improve formatting",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-08-01T03:10:06.395860",
+        "task": "general",
+        "model": "nemotron",
+        "score": 85,
+        "feedback": [
+            "Response could be more detailed",
+            "Could improve formatting",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-08-01T06:51:45.321500",
+        "task": "general",
+        "model": "step",
+        "score": 100,
+        "feedback": [
+            "Good response length",
+            "Well structured",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-08-01T06:58:55.897495",
+        "task": "general",
+        "model": "nemotron",
+        "score": 90,
+        "feedback": [
+            "Response could be more detailed",
+            "Well structured",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-08-01T08:53:40.566560",
+        "task": "general",
+        "model": "nemotron",
+        "score": 65,
+        "feedback": [
+            "Response is very short",
+            "Could improve formatting",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-08-01T08:54:07.331913",
+        "task": "general",
+        "model": "nemotron",
+        "score": 100,
+        "feedback": [
+            "Good response length",
+            "Well structured",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-08-01T09:02:46.184368",
+        "task": "general",
+        "model": "step",
+        "score": 70,
+        "feedback": [
+            "Response is very short",
+            "Well structured",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-08-01T09:13:59.084286",
+        "task": "general",
+        "model": "step",
+        "score": 90,
+        "feedback": [
+            "Response could be more detailed",
+            "Well structured",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-08-01T14:35:59.903511",
+        "task": "general",
+        "model": "step",
+        "score": 65,
+        "feedback": [
+            "Response is very short",
+            "Could improve formatting",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-08-01T14:48:07.482980",
+        "task": "general",
+        "model": "nemotron",
+        "score": 100,
+        "feedback": [
+            "Good response length",
+            "Well structured",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-08-01T14:49:23.038371",
+        "task": "general",
+        "model": "nemotron",
+        "score": 100,
+        "feedback": [
+            "Good response length",
+            "Well structured",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-08-01T15:22:24.333027",
+        "task": "general",
+        "model": "step",
+        "score": 90,
+        "feedback": [
+            "Response could be more detailed",
+            "Well structured",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-08-01T15:35:51.897508",
+        "task": "general",
+        "model": "step",
+        "score": 100,
+        "feedback": [
+            "Good response length",
+            "Well structured",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-08-01T15:36:56.340243",
+        "task": "general",
+        "model": "step",
+        "score": 100,
+        "feedback": [
+            "Good response length",
+            "Well structured",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-08-01T15:38:38.721156",
+        "task": "general",
+        "model": "step",
+        "score": 70,
+        "feedback": [
+            "Response is very short",
+            "Well structured",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-08-01T15:39:58.373796",
+        "task": "general",
+        "model": "nemotron",
+        "score": 100,
+        "feedback": [
+            "Good response length",
+            "Well structured",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-08-01T15:50:11.413947",
+        "task": "general",
+        "model": "nemotron",
+        "score": 85,
+        "feedback": [
+            "Response could be more detailed",
+            "Could improve formatting",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-08-01T15:50:12.819127",
+        "task": "general",
+        "model": "nemotron",
+        "score": 65,
+        "feedback": [
+            "Response is very short",
+            "Could improve formatting",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-08-01T15:58:59.449897",
+        "task": "general",
+        "model": "step",
+        "score": 65,
+        "feedback": [
+            "Response is very short",
+            "Could improve formatting",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-08-01T16:22:32.418001",
+        "task": "general",
+        "model": "step",
+        "score": 65,
+        "feedback": [
+            "Response is very short",
+            "Could improve formatting",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-08-01T16:40:29.340597",
+        "task": "general",
+        "model": "nemotron",
+        "score": 65,
+        "feedback": [
+            "Response is very short",
+            "Could improve formatting",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-08-01T16:50:20.045420",
+        "task": "general",
+        "model": "step",
+        "score": 65,
+        "feedback": [
+            "Response is very short",
+            "Could improve formatting",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-08-01T16:51:45.069988",
+        "task": "general",
+        "model": "step",
+        "score": 65,
+        "feedback": [
+            "Response is very short",
+            "Could improve formatting",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-08-01T17:14:45.830380",
+        "task": "general",
+        "model": "nemotron",
+        "score": 65,
+        "feedback": [
+            "Response is very short",
+            "Could improve formatting",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-08-01T19:28:51.623839",
+        "task": "general",
+        "model": "nemotron",
+        "score": 65,
+        "feedback": [
+            "Response is very short",
+            "Could improve formatting",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-08-01T19:37:38.301898",
+        "task": "general",
+        "model": "nemotron",
+        "score": 85,
+        "feedback": [
+            "Response could be more detailed",
+            "Could improve formatting",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-08-01T19:38:57.978257",
+        "task": "general",
+        "model": "nemotron",
+        "score": 65,
+        "feedback": [
+            "Response is very short",
+            "Could improve formatting",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-08-01T20:09:13.129100",
+        "task": "general_chat",
+        "model": "nemotron",
+        "score": 65,
+        "feedback": [
+            "Response is very short",
+            "Could improve formatting",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-08-01T20:15:15.396769",
+        "task": "general_chat",
+        "model": "nemotron",
+        "score": 65,
+        "feedback": [
+            "Response is very short",
+            "Could improve formatting",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-08-01T20:25:31.466951",
+        "task": "general_chat",
+        "model": "nemotron",
+        "score": 65,
+        "feedback": [
+            "Response is very short",
+            "Could improve formatting",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-08-01T20:33:47.260357",
+        "task": "general_chat",
+        "model": "nemotron",
+        "score": 85,
+        "feedback": [
+            "Response could be more detailed",
+            "Could improve formatting",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-08-01T20:59:36.448648",
+        "task": "general_chat",
+        "model": "nemotron",
+        "score": 65,
+        "feedback": [
+            "Response is very short",
+            "Could improve formatting",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-08-02T05:19:22.470443",
+        "task": "general_chat",
+        "model": "nemotron",
+        "score": 65,
+        "feedback": [
+            "Response is very short",
+            "Could improve formatting",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-08-02T05:21:21.925317",
+        "task": "general",
+        "model": "nemotron",
+        "score": 100,
+        "feedback": [
+            "Good response length",
+            "Well structured",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-08-02T05:22:04.670688",
+        "task": "general",
+        "model": "nemotron",
+        "score": 100,
+        "feedback": [
+            "Good response length",
+            "Well structured",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-08-02T05:23:25.269627",
+        "task": "general",
+        "model": "nemotron",
+        "score": 100,
+        "feedback": [
+            "Good response length",
+            "Well structured",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-08-02T05:27:01.439982",
+        "task": "general_chat",
+        "model": "nemotron",
+        "score": 65,
+        "feedback": [
+            "Response is very short",
+            "Could improve formatting",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-08-02T05:45:06.053103",
+        "task": "coding",
+        "model": "minimax",
+        "score": 100,
+        "feedback": [
+            "Good response length",
+            "Includes code",
+            "Well structured",
+            "Relevant response"
+        ]
+    },
+    {
+        "timestamp": "2026-08-14T22:06:28.392689",
+        "task": "general_chat",
+        "model": "nemotron",
+        "score": 65,
+        "feedback": [
+            "Response is very short",
+            "Could improve formatting",
+            "Relevant response"
+        ]
     }
 ]

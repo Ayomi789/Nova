@@ -5,6 +5,18 @@ from scripts.config import load_models
 from brain.memory.router_memory import get_score
 
 
+GREETINGS = {
+    "hi",
+    "hello",
+    "hey",
+    "yo",
+    "sup",
+    "good morning",
+    "good afternoon",
+    "good evening",
+}
+
+
 TASK_KEYWORDS = {
     "coding": {
         "react": 10,
@@ -63,17 +75,24 @@ TASK_KEYWORDS = {
         "brief": 4,
         "short": 3,
     },
-    "general": {},
 }
 
 
 def detect_task(prompt):
 
-    prompt = prompt.lower()
+    clean = prompt.strip().lower()
+
+    # Greeting detection
+    if clean in GREETINGS:
+        return {
+            "task": "general_chat",
+            "confidence": 100,
+            "matches": ["greeting"],
+            "scores": {},
+        }
 
     normalized = (
-        prompt
-        .replace(" ", "")
+        clean.replace(" ", "")
         .replace("-", "")
         .replace("_", "")
     )
@@ -89,12 +108,13 @@ def detect_task(prompt):
         for keyword, weight in keywords.items():
 
             if " " in keyword:
-                matched = keyword in prompt
+                matched = keyword in clean
             else:
+
                 matched = (
                     re.search(
                         rf"\b{re.escape(keyword)}\b",
-                        prompt,
+                        clean,
                     )
                     is not None
                 )
@@ -109,23 +129,23 @@ def detect_task(prompt):
         scores[task] = total
         matches[task] = found
 
-    task = max(scores, key=scores.get)
-    highest = scores[task]
+    highest = max(scores.values())
 
     if highest == 0:
         return {
             "task": "general",
-            "confidence": 100,
+            "confidence": 40,
             "matches": [],
             "scores": scores,
         }
 
-    total_score = sum(scores.values())
+    task = max(scores, key=scores.get)
 
-    confidence = (
-        round(highest / total_score * 100)
-        if total_score
-        else 100
+    total = sum(scores.values())
+
+    confidence = min(
+        95,
+        round(highest / total * 100),
     )
 
     return {
@@ -135,38 +155,33 @@ def detect_task(prompt):
         "scores": scores,
     }
 
+
 def model_score(model, task):
 
-    score = 0
-
-    history_score = get_score(
+    history = get_score(
         task,
         model["alias"],
     )
 
-    if task != "speed":
+    latency = model.get("latency", 999999)
 
-        score += model.get(task, 0) * 0.45
-        score += model.get("score", 0) * 0.25
-        score += model.get("reliability", 0) * 0.15
+    if task == "speed":
 
-        latency = model.get("latency")
+        score = (
+            max(0, 100 - latency / 100) * 0.70
+            + model.get("reliability", 0) * 0.20
+            + history * 0.10
+        )
 
-        if latency:
-            score += max(0, 100 - latency / 100) * 0.05
+        return round(score, 2)
 
-        score += history_score * 0.10
-
-    else:
-
-        latency = model.get("latency")
-        reliability = model.get("reliability", 0)
-
-        if latency:
-            score += max(0, 100 - latency / 100) * 0.70
-
-        score += reliability * 0.20
-        score += history_score * 0.10
+    score = (
+        model.get(task, 0) * 0.45
+        + model.get("score", 0) * 0.25
+        + model.get("reliability", 0) * 0.15
+        + max(0, 100 - latency / 100) * 0.05
+        + history * 0.10
+    )
 
     return round(score, 2)
 
@@ -174,9 +189,30 @@ def model_score(model, task):
 def choose_model(prompt):
 
     detection = detect_task(prompt)
+
     task = detection["task"]
 
+    # NEW:
+    # Don't waste time ranking models for greetings.
+    if task == "general_chat":
+
+        ranking = rank_models()
+
+        first = ranking[0]
+
+        return {
+            **detection,
+            "model": {
+                "alias": first["alias"],
+                "id": first["id"],
+                "provider": first["provider"],
+                "score": first["score"],
+            },
+            "ranking": [],
+        }
+
     models = load_models()["models"]
+
     ranking = rank_models()
 
     candidates = []
@@ -185,33 +221,28 @@ def choose_model(prompt):
 
         alias = item["alias"]
 
-        combined = {
+        merged = {
             **models.get(alias, {}),
             **item,
         }
 
-        candidates.append(
-            {
-                "alias": alias,
-                "id": item["id"],
-                "provider": item["provider"],
-                "score": model_score(
-                    combined,
-                    task,
-                ),
-            }
-        )
+        candidates.append({
+            "alias": alias,
+            "id": item["id"],
+            "provider": item["provider"],
+            "score": model_score(
+                merged,
+                task,
+            ),
+        })
 
     candidates.sort(
-        key=lambda model: model["score"],
+        key=lambda m: m["score"],
         reverse=True,
     )
 
     return {
-        "task": task,
-        "confidence": detection["confidence"],
-        "matches": detection["matches"],
-        "scores": detection["scores"],
+        **detection,
         "model": candidates[0],
         "ranking": candidates,
     }

@@ -92,10 +92,6 @@ def benchmark(runs=3, warmup=True):
 
     for alias, model in models.items():
 
-        print("\n================================")
-        print(f"Testing: {alias}")
-        print(f"Model  : {model['id']}")
-        print("================================")
 
         if warmup:
 

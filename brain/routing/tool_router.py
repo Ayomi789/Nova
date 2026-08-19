@@ -61,17 +61,18 @@ def detect(prompt):
                 ):
                     path = extract_path(original_prompt)
 
-                    arguments = {}
-
-                    if path:
-                        arguments["path"] = path
+                    if path is None:
+                        return Intent(
+                            use_tool=False,
+                            arguments={},
+                        )
 
                     return Intent(
                         use_tool=True,
                         tool=tool,
                         action=action,
                         confidence=100,
-                        arguments=arguments,
+                        arguments={"path": path},
                     )
 
     return Intent(

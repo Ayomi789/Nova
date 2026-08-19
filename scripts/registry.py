@@ -8,13 +8,13 @@ from scripts.command import (
     history,
 )
 
+from scripts.chat import chat
 from scripts.benchmark import benchmark
 from scripts.recommend import recommend
 from scripts.compare import compare
 from scripts.preference import preference
 from scripts.advisor import advisor
 from scripts.rank import rank
-from scripts.chat import chat
 
 
 def benchmark_command(args):
@@ -87,6 +87,7 @@ COMMANDS = {
     "use": use_command,
     "current": lambda args: current(),
     "doctor": lambda args: doctor(),
+    "chat": lambda args: chat(),
     "benchmark": benchmark_command,
     "history": lambda args: history(),
     "recommend": recommend_command,
@@ -94,6 +95,4 @@ COMMANDS = {
     "preference": preference_command,
     "advisor": advisor_command,
     "rank": rank_command,
-    "chat": chat,
-
 }

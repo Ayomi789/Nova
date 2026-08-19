@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nova Agent v0.2.0</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #1e2030;
+    color: #d0d0d0;
+    font-family: 'Consolas', 'Menlo', 'Monaco', 'DejaVu Sans Mono', 'Courier New', monospace;
+    font-size: 14px;
+    line-height: 1.4;
+    padding: 10px 14px 12px;
+  }
+
+  /* ── Banner ── */
+  .banner-wrap {
+    margin-bottom: 4px;
+    overflow: hidden;
+    height: 96px;
+  }
+  #banner {
+    display: block;
+    margin: 0 auto;
+    color: #d4a828;
+    font-size: 12px;
+    line-height: 1.12;
+    letter-spacing: 0;
+    user-select: none;
+  }
+
+  /* ── Content Box ── */
+  .content-box {
+    border: 1px solid #b08a24;
+    padding: 8px 14px 6px;
+    margin-bottom: 10px;
+  }
+
+  .box-title {
+    text-align: center;
+    color: #b08a24;
+    font-size: 14px;
+    margin-bottom: 6px;
+    white-space: nowrap;
+  }
+  .box-title .d { color: #505868; }
+
+  .main-content { display: flex; gap: 12px; }
+
+  /* ── Left Column ── */
+  .left-col {
+    flex: 0 0 280px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .emblem-wrap {
+    width: 240px;
+    height: 240px;
+    margin-bottom: 4px;
+  }
+  .emblem-wrap canvas { width: 100%; height: 100%; }
+
+  .info-block {
+    text-align: center;
+    font-size: 12px;
+    line-height: 1.7;
+  }
+  .info-block .model { color: #b08a24; font-size: 13px; }
+  .info-block .dot   { color: #687080; }
+  .info-block .org   { color: #687080; }
+  .info-block .path  { color: #606878; font-size: 11px; }
+  .info-block .sess  { color: #606878; font-size: 11px; }
+
+  /* ── Right Column ── */
+  .right-col { flex: 1; min-width: 0; }
+
+  .section-title {
+    color: #b08a24;
+    font-weight: bold;
+    font-size: 14px;
+    margin-bottom: 1px;
+  }
+
+  .tool-list, .skill-list { margin-bottom: 8px; }
+  .titem { margin-bottom: 0; line-height: 1.5; }
+  .cat  { color: #687080; }
+  .vals { color: #d0d0d0; }
+  .more-tools { color: #687080; font-style: italic; margin-top: 1px; }
+
+  .box-footer {
+    text-align: center;
+    color: #b08a24;
+    margin-top: 4px;
+    font-size: 13px;
+  }
+
+  /* ── Bottom Area ── */
+  .welcome { color: #d0d0d0; margin-bottom: 8px; }
+  .security-warn { color: #707888; margin-bottom: 3px; font-size: 13px; }
+
+  .status-bar {
+    display: inline-flex;
+    align-items: center;
+    background: #262a38;
+    padding: 2px 0;
+    font-size: 13px;
+    margin-bottom: 8px;
+  }
+  .sb { padding: 0 5px; }
+  .sb-icon  { color: #a098c0; }
+  .sb-model { color: #b08a24; font-weight: bold; }
+  .sb-sep   { color: #484e5c; }
+  .sb-ctx   { color: #687080; }
+  .sb-bar   { color: #484e5c; letter-spacing: -1px; }
+  .sb-time  { color: #687080; }
+
+  .input-line { display: flex; align-items: center; }
+  .prompt-ch { margin-right: 2px; }
+  .cursor {
+    display: inline-block;
+    width: 8px;
+    height: 16px;
+    background: #a0a0a0;
+    animation: blink 1s step-end infinite;
+    vertical-align: text-bottom;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+</style>
+</head>
+<body>
+
+<!-- ═══════ BANNER ═══════ -->
+<div class="banner-wrap">
+  <pre id="banner">
+    ███╗   ██╗ ██████╗ ██╗   ██╗ █████╗
+    ████╗  ██║██╔═══██╗██║   ██║██╔══██╗
+    ██╔██╗ ██║██║   ██║██║   ██║███████║
+    ██║╚██╗██║██║   ██║╚██╗ ██╔╝██╔══██║
+    ██║ ╚████║╚██████╔╝ ╚████╔╝ ██║  ██║
+    ╚═╝  ╚═══╝ ╚═════╝   ╚═══╝  ╚═╝  ╚═╝</pre>
+</div>
+
+<!-- ═══════ CONTENT BOX ═══════ -->
+<div class="content-box">
+  <div class="box-title">
+    <span class="d">──────── </span>Nova Agent v0.2.0 (2026.8.18)<span class="d"> ────────</span>
+  </div>
+
+  <div class="main-content">
+    <div class="left-col">
+      <div class="emblem-wrap">
+        <canvas id="emblem" width="480" height="480"></canvas>
+      </div>
+      <div class="info-block">
+        <span class="model">stepfun-ai/step-3.7-flash</span> <span class="dot">·</span> <span class="org">NOVA · NVIDIA NIM</span><br>
+        <span class="path">C:\Users\DELL\Nova</span><br>
+        <span class="sess">Session: 20260818_143207_9c3f1a</span>
+      </div>
+    </div>
+
+    <div class="right-col">
+      <div class="section-title">Available Tools</div>
+      <div class="tool-list">
+        <div class="titem"><span class="cat">file:</span>&nbsp;<span class="vals">glob, grep, read_file, write_file, edit, patch</span></div>
+        <div class="titem"><span class="cat">execution:</span>&nbsp;<span class="vals">bash, powershell, notebook_edit, monitor</span></div>
+        <div class="titem"><span class="cat">web:</span>&nbsp;<span class="vals">web_fetch, web_search, deep_research, workflow</span></div>
+        <div class="titem"><span class="cat">task:</span>&nbsp;<span class="vals">task_create, task_get, task_list, task_output, task_stop, task_update</span></div>
+        <div class="titem"><span class="cat">schedule:</span>&nbsp;<span class="vals">cron_create, cron_delete, cron_list, schedule_wakeup</span></div>
+        <div class="titem"><span class="cat">agent:</span>&nbsp;<span class="vals">task, skill, design_sync, send_message, push_notification</span></div>
+        <div class="titem"><span class="cat">vcs:</span>&nbsp;<span class="vals">enter_worktree, exit_worktree, report_findings</span></div>
+        <div class="titem more-tools">(and 3 more toolsets...)</div>
+      </div>
+
+      <div class="section-title">Available Skills</div>
+      <div class="skill-list">
+        <div class="titem"><span class="cat">research:</span>&nbsp;<span class="vals">deep-research, llm-wiki, blogwatcher</span></div>
+        <div class="titem"><span class="cat">design:</span>&nbsp;<span class="vals">design-sync, dataviz, architecture-diagram</span></div>
+        <div class="titem"><span class="cat">code-quality:</span>&nbsp;<span class="vals">code-review, security-review, simplify, verify, debug, doctor</span></div>
+        <div class="titem"><span class="cat">automation:</span>&nbsp;<span class="vals">batch, loop, run, insights, recap</span></div>
+        <div class="titem"><span class="cat">config:</span>&nbsp;<span class="vals">update-config, fewer-permission-prompts, init, config, usage</span></div>
+        <div class="titem"><span class="cat">agents:</span>&nbsp;<span class="vals">agents, run-skill-generator, claude-api, team-onboarding</span></div>
+        <div class="titem"><span class="cat">productivity:</span>&nbsp;<span class="vals">google-workspace, linear, notion, ocr...</span></div>
+        <div class="titem more-tools">(and 4 more skill categories...)</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="box-footer">38 tools · 79 skills · /help for commands</div>
+</div>
+
+<!-- ═══════ BOTTOM ═══════ -->
+<div class="welcome">Welcome to Nova Agent! Type your message or /help for commands.</div>
+<div class="security-warn">△ nova-bridge routing active · NVIDIA NIM · endpoint 127.0.0.1:8788 · proxied model forced per session</div>
+
+<div class="status-bar">
+  <span class="sb sb-icon">✦</span>
+  <span class="sb sb-model">stepfun-ai/step-3.7-flash</span>
+  <span class="sb sb-sep">|</span>
+  <span class="sb sb-ctx">ctx —</span>
+  <span class="sb sb-sep">|</span>
+  <span class="sb sb-bar">[████████████]</span>
+  <span class="sb sb-sep">—</span>
+  <span class="sb sb-time">19s</span>
+</div>
+
+<div class="input-line"><span class="prompt-ch">&gt;</span><span class="cursor"></span></div>
+
+<script>
+/* ────── EMBLEM: dot-matrix nova star ────── */
+(function () {
+  var cv = document.getElementById('emblem');
+  var cx = cv.getContext('2d');
+  var W = cv.width, H = cv.height;
+  var G = '#b08a24';
+
+  function dot(x, y, r) {
+    cx.beginPath();
+    cx.arc(x, y, r || 2, 0, Math.PI * 2);
+    cx.fill();
+  }
+
+  function line(x1, y1, x2, y2, r) {
+    var dx = x2 - x1, dy = y2 - y1;
+    var d = Math.sqrt(dx * dx + dy * dy);
+    var s = Math.max(1, Math.floor(d / 10));
+    for (var i = 0; i <= s; i++) {
+      var t = i / s;
+      dot(x1 + dx * t, y1 + dy * t, r);
+    }
+  }
+
+  cx.fillStyle = G;
+  var mx = W / 2, my = H / 2;
+
+  /* central burst: 4 long + 4 short rays */
+  var rays = [
+    0, Math.PI / 2, Math.PI, Math.PI * 1.5
+  ];
+  for (var r = 0; r < rays.length; r++) {
+    var a = rays[r];
+    line(mx + Math.cos(a) * 26, my + Math.sin(a) * 26,
+         mx + Math.cos(a) * 160, my + Math.sin(a) * 160, 1.8);
+  }
+  rays = [Math.PI / 4, Math.PI * 0.75, Math.PI * 1.25, Math.PI * 1.75];
+  for (var r = 0; r < rays.length; r++) {
+    var a = rays[r];
+    line(mx + Math.cos(a) * 26, my + Math.sin(a) * 26,
+         mx + Math.cos(a) * 105, my + Math.sin(a) * 105, 1.8);
+  }
+
+  /* orbit ring */
+  for (var a = 0; a < Math.PI * 2; a += 0.12)
+    dot(mx + Math.cos(a) * 62, my + Math.sin(a) * 62, 1.5);
+
+  /* sparkle accents */
+  for (var a = 0; a < Math.PI * 2; a += 0.42)
+    dot(mx + Math.cos(a) * 190, my + Math.sin(a) * 190, 1.3);
+
+  dot(mx, my, 3);
+})();
+</script>
+
+</body>
+</html>
