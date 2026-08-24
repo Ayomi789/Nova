@@ -30,7 +30,43 @@ def build_model_list(decision):
     ]
 
 
-def race_models(client, models, conversation, prompt):
+def race_models(
+    client,
+    models,
+    conversation,
+    prompt,
+    stream=False,
+    on_start=None,
+    on_token=None,
+):
+
+    if stream and models:
+
+        model = models[0]
+
+        messages = [
+            *conversation,
+            {
+                "role": "user",
+                "content": prompt,
+            },
+        ]
+
+        if on_start:
+            on_start()
+
+        reply = ""
+
+        for token in client.stream_chat(
+            model=model["id"],
+            messages=messages,
+        ):
+            if on_token:
+                on_token(token)
+
+            reply += token
+
+        return model, reply
 
     def ask(model):
         try:

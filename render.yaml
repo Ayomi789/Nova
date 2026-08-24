@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: nova-demo
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements-deploy.txt
+    startCommand: python serve_demo.py
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12"
+      - key: NVIDIA_API_KEY
+        sync: false
+      - key: NOVA_MODEL
+        value: stepfun-ai/step-3.7-flash

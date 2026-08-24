@@ -24,3 +24,6 @@ cache/
 
 # Secrets
 config/secrets.json
+
+# Local binaries / tunnel logs
+.bin/

@@ -11,6 +11,7 @@ import requests
 
 from tools.registry import all_tools, get as get_tool
 from brain.routing.personas import PERSONA_DIR, load_persona
+from scripts.agent_skills import collect_skills
 from scripts.prompt_builder import build_system_prompt
 from scripts.router import detect_task
 from scripts import history
@@ -805,6 +806,15 @@ def run_turn(config, conversation):
 
         persona_name = pick_persona(prompt_text) if prompt_text else "general"
         persona = load_persona(persona_name)
+
+        for label, content in collect_skills(prompt_text):
+            persona = (
+                f"{persona}\n\n{content}"
+                if persona
+                else content
+            )
+
+            paint_plain_segs([(DIM, f"◈ skill: {label}")])
 
         if persona_name != "general":
             paint_plain_segs([(DIM, f"◈ persona: {persona_name}")])

@@ -9,12 +9,11 @@ from brain.routing.tool_router import detect as detect_tool
 from tools.executor import execute
 
 
-def process(client, conversation, prompt):
+def process(client, conversation, prompt, stream=False, on_start=None, on_token=None):
 
     preprocess_result = preprocess(prompt)
 
     if preprocess_result["handled"]:
-
         reply = preprocess_result["reply"]
 
         save_exchange(
@@ -65,6 +64,9 @@ def process(client, conversation, prompt):
         client,
         conversation,
         prompt_to_send,
+        stream=stream,
+        on_start=on_start,
+        on_token=on_token,
     )
 
     reply = pipeline_result["reply"]

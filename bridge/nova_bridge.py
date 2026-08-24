@@ -455,12 +455,19 @@ import subprocess
 import threading
 import time
 import json
+from pathlib import Path
 
 import requests
 import uvicorn
 
+from scripts.config import load_models
+
 from fastapi import FastAPI, Request
-from fastapi.responses import JSONResponse, StreamingResponse
+from fastapi.responses import (
+    HTMLResponse,
+    JSONResponse,
+    StreamingResponse,
+)
 
 from bridge.base import BaseBridge
 
@@ -468,12 +475,55 @@ from bridge.base import BaseBridge
 app = FastAPI(title="Nova Bridge")
 bridge_config = {}
 
+DEMO_FILE = (
+    Path(__file__).resolve().parent
+    / "demo.html"
+)
+
+RATE_LIMIT = 30
+RATE_WINDOW = 600.0
+
+_rate_bucket = {}
+
+
+def _rate_ok(ip):
+    now = time.time()
+
+    hits = [
+        t
+        for t in _rate_bucket.get(ip, [])
+        if now - t < RATE_WINDOW
+    ]
+
+    if len(hits) >= RATE_LIMIT:
+        _rate_bucket[ip] = hits
+        return False
+
+    hits.append(now)
+    _rate_bucket[ip] = hits
+
+    return True
+
 
 @app.get("/")
 async def root():
+    try:
+        return HTMLResponse(
+            DEMO_FILE.read_text(encoding="utf-8")
+        )
+
+    except OSError:
+        return {
+            "status": "ok",
+            "service": "Nova Bridge"
+        }
+
+
+@app.get("/api")
+async def api_status():
     return {
         "status": "ok",
-        "service": "Nova Bridge"
+        "service": "Nova Bridge",
     }
 
 
@@ -657,9 +707,44 @@ def sse(event, data):
     )
 
 
-def generate_events(upstream):
+# Measured reliability order from cache/benchmark.json:
+# nemotron 100%, minimax 100%, step 96%, deepseek-flash 73%.
+FAILOVER_ALIASES = [
+    "nemotron",
+    "minimax",
+    "step",
+    "deepseek-flash",
+]
+
+
+def _failover_chain(primary):
+    """
+    Primary model first, then the most reliable
+    backups measured in benchmarks. Duplicates removed.
+    """
+
+    chain = [primary]
+
+    try:
+        models = load_models()["models"]
+    except Exception:
+        models = {}
+
+    for alias in FAILOVER_ALIASES:
+
+        model_id = models.get(
+            alias, {}
+        ).get("id")
+
+        if model_id and model_id not in chain:
+            chain.append(model_id)
+
+    return chain
+
+
+def generate_events(upstream, served_model=None):
     usage = {"input_tokens": 0, "output_tokens": 0}
-    model = bridge_config["model_id"]
+    model = served_model or bridge_config["model_id"]
 
     yield sse("message_start", {
         "type": "message_start",
@@ -792,6 +877,24 @@ def generate_events(upstream):
 
 @app.post("/v1/messages")
 async def messages(request: Request):
+    client_ip = (
+        request.client.host
+        if request.client
+        else "unknown"
+    )
+
+    if not _rate_ok(client_ip):
+        return JSONResponse(
+            status_code=429,
+            content={
+                "type": "error",
+                "error": {
+                    "type": "rate_limit_error",
+                    "message": "Rate limit reached. Try again in a few minutes.",
+                },
+            },
+        )
+
     data = await request.json()
 
     if not bridge_config:
@@ -829,48 +932,62 @@ async def messages(request: Request):
     if data.get("tools"):
         payload["tools"] = convert_tools(data["tools"])
 
-    try:
-        response = requests.post(
-            bridge_config["base_url"] + bridge_config["chat_endpoint"],
-            json=payload,
-            headers=headers,
-            timeout=120,
-            stream=True,
+    candidates = _failover_chain(bridge_config["model_id"])
+
+    response = None
+    served_model = None
+    last_detail = "no upstream attempt"
+
+    for model_id in candidates:
+
+        payload["model"] = model_id
+
+        try:
+            attempt = requests.post(
+                bridge_config["base_url"]
+                + bridge_config["chat_endpoint"],
+                json=payload,
+                headers=headers,
+                timeout=120,
+                stream=True,
+            )
+
+        except requests.RequestException as e:
+            last_detail = f"{model_id}: {e}"
+            continue
+
+        attempt.encoding = "utf-8"
+
+        if attempt.status_code == 200:
+            response = attempt
+            served_model = model_id
+            break
+
+        try:
+            detail = attempt.json()
+        except ValueError:
+            detail = attempt.text
+
+        last_detail = (
+            f"{model_id}: HTTP "
+            f"{attempt.status_code} {detail}"
         )
-    except requests.RequestException as e:
+
+    if response is None:
         return JSONResponse(
             status_code=502,
             content={
                 "type": "error",
                 "error": {
                     "type": "api_error",
-                    "message": str(e),
-                },
-            },
-        )
-
-    response.encoding = "utf-8"
-
-    if response.status_code != 200:
-        try:
-            detail = response.json()
-        except ValueError:
-            detail = response.text
-
-        return JSONResponse(
-            status_code=response.status_code,
-            content={
-                "type": "error",
-                "error": {
-                    "type": "api_error",
-                    "message": f"Upstream {response.status_code}: {detail}",
+                    "message": f"All models failed. Last: {last_detail}",
                 },
             },
         )
 
     if data.get("stream"):
         return StreamingResponse(
-            generate_events(response),
+            generate_events(response, served_model),
             media_type="text/event-stream",
             headers={"Cache-Control": "no-cache"},
         )
@@ -884,7 +1001,7 @@ async def messages(request: Request):
             "id": "msg_nova",
             "type": "message",
             "role": "assistant",
-            "model": bridge_config["model_id"],
+            "model": served_model,
             "content": build_assistant_blocks(choice),
             "stop_reason": "end_turn",
             "stop_sequence": None,

@@ -17,8 +17,16 @@ CLEAR_COMMAND = "clear"
 
 def chat_loop(client, conversation):
     """
-    Main interactive chat loop.
+    Main interactive chat loop with streaming support.
     """
+
+    def on_start():
+        print()
+        print("Nova >")
+        print("", end="", flush=True)
+
+    def on_token(token):
+        print(token, end="", flush=True)
 
     while True:
 
@@ -45,17 +53,20 @@ def chat_loop(client, conversation):
                 client,
                 conversation,
                 prompt,
+                stream=True,
+                on_start=on_start,
+                on_token=on_token,
             )
 
-            if not response.get("handled"):
-               
-                memory = response.get("memory_result")
+            if response.get("handled"):
+                show_reply(response["reply"])
+                continue
 
+            memory = response.get("memory_result")
             if memory:
                 show_memory(memory)
-                
-            
-            show_reply(response["reply"])
+
+            print()
 
         except Exception as e:
             show_error(e)

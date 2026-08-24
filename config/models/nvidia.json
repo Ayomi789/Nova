@@ -122,6 +122,22 @@
         "planning"
       ]
     },
+      "deepseek-v4-flash-0731": {
+      "id": "deepseek-ai/deepseek-v4-flash-0731",
+      "provider": "nvidia",
+      "description": "deepseek-v4-flash-0731",
+      "strength": 93,
+      "coding": 92,
+      "reasoning": 92,
+      "vision": 85,
+      "speed_class": "flash",
+      "context": 128000,
+      "recommended_for": [
+        "chat",
+        "coding",
+        "speed"
+      ]
+    },
 
     "gpt-oss": {
       "id": "openai/gpt-oss-120b",

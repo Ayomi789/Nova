@@ -11,6 +11,9 @@ def run(
     client,
     conversation,
     prompt,
+    stream=False,
+    on_start=None,
+    on_token=None,
 ):
     decision = choose_model(prompt)
 
@@ -31,6 +34,9 @@ def run(
         models,
         conversation,
         full_prompt,
+        stream=stream,
+        on_start=on_start,
+        on_token=on_token,
     )
 
     record(

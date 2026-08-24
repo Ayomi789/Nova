@@ -1,9 +1,39 @@
 import os
 import sys
+from functools import lru_cache
+from pathlib import Path
 
 from scripts.config import get_preference
 
 from scripts.personality import NOVA_SYSTEM
+
+
+VERIFICATION_SKILL = (
+    Path(__file__).resolve().parent.parent
+    / ".agents"
+    / "skills"
+    / "verification-before-completion"
+    / "SKILL.md"
+)
+
+
+@lru_cache(maxsize=1)
+def load_verification_skill():
+    """
+    Always-on discipline skill: no completion
+    claims without fresh verification evidence.
+    """
+
+    if not VERIFICATION_SKILL.exists():
+        return ""
+
+    try:
+        return VERIFICATION_SKILL.read_text(
+            encoding="utf-8",
+        )
+
+    except Exception:
+        return ""
 
 
 def build_environment_context():
@@ -77,6 +107,11 @@ def build_system_prompt():
     preference = get_preference()
 
     prompt = NOVA_SYSTEM + build_environment_context()
+
+    verification = load_verification_skill()
+
+    if verification:
+        prompt += "\n\n" + verification
 
     if preference == "speed":
         prompt += """

@@ -244,7 +244,7 @@ class NvidiaClient(BaseClient):
             "messages": messages,
             "temperature": mode.temperature,
             "max_tokens": mode.max_tokens,
-            # "stream": True,
+            "stream": True,
         }
 
         
