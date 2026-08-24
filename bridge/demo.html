@@ -594,7 +594,7 @@ kbd{
       <div class="dock__hint">
         <span><kbd>Enter</kbd> send</span>
         <span><kbd>Shift</kbd>+<kbd>Enter</kbd> ignored</span>
-        <span>· 1024 max tokens · 12-msg context</span>
+        <span>· 2048 max tokens · 12-msg context</span>
       </div>
     </div>
   </div>
@@ -616,19 +616,19 @@ kbd{
 
   /* ------------------------------------------------------------------ *
    *  NOVA live demo · vanilla, no deps
-   *  POST /v1/messages  {stream:true, max_tokens:1024, messages:[...12]}
+   *  POST /v1/messages  {stream:true, max_tokens:2048, messages:[...12]}
    *  GET  /bridge       {model_id}
    * ------------------------------------------------------------------ */
 
   var ENDPOINT = "/v1/messages";
   var BRIDGE = "/bridge";
   var WINDOW_MAX = 12;
-  var MAX_TOKENS = 1024;
+  var MAX_TOKENS = 2048;
   var SYSTEM_PROMPT =
     "You are Nova, an autonomous AI agent demonstrating yourself on a live " +
     "portfolio demo. ALWAYS respond in English, even if the user writes in " +
     "another language or says nothing at all. Be helpful, direct and a little " +
-    "witty. Keep answers under 250 words unless the user asks for more.";
+    "witty. Keep answers concise but complete — don't artificially truncate.";
 
   var $ = function (id) { return document.getElementById(id); };
 
