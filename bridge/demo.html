@@ -125,17 +125,39 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .pill--model{border-color:var(--line-gold);background:var(--gold-soft);color:#dcd0ab}
 .pill__k{color:var(--dim);letter-spacing:.2em}
 .pill__v{color:var(--gold-lift);overflow:hidden;text-overflow:ellipsis;max-width:min(42vw,270px)}
-.pill__sel{
-  appearance:none;-webkit-appearance:none;
-  background:transparent;border:0;color:var(--gold-lift);
-  font:inherit;letter-spacing:.12em;text-transform:uppercase;font-size:10px;
-  max-width:min(42vw,270px);text-overflow:ellipsis;overflow:hidden;
-  cursor:pointer;padding-right:12px;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5'%3E%3Cpath d='M1 1l3 3 3-3' fill='none' stroke='%23d4af37' stroke-width='1.4'/%3E%3C/svg%3E");
-  background-repeat:no-repeat;background-position:right center;
+.dd{position:relative;display:inline-flex;min-width:0}
+.dd__btn{
+  display:inline-flex;align-items:center;gap:6px;
+  background:none;border:0;cursor:pointer;padding:0;
+  color:var(--gold-lift);font:inherit;font-size:10px;letter-spacing:.12em;text-transform:uppercase;
+  max-width:min(42vw,270px);
 }
-.pill__sel:focus{outline:none}
-.pill__sel option{background:#121218;color:#e8e6e1;text-transform:none;letter-spacing:normal}
+.dd__btn:focus{outline:none}
+.dd__btn span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dd__btn svg{flex:none;width:9px;height:9px;color:var(--gold);transition:transform .25s}
+.dd__btn[aria-expanded="true"] svg{transform:rotate(180deg)}
+.dd__list{
+  position:absolute;top:calc(100% + 10px);right:-6px;min-width:250px;max-width:72vw;
+  background:linear-gradient(180deg,#15151c,#0e0e13);
+  border:1px solid var(--line-gold);border-radius:13px;padding:6px;
+  box-shadow:0 30px 70px -20px rgba(0,0,0,.95),0 0 0 1px rgba(0,0,0,.5),0 0 32px -12px rgba(212,175,55,.4);
+  z-index:60;
+  animation:ddIn .22s cubic-bezier(.16,.84,.24,1) both;
+}
+@keyframes ddIn{from{opacity:0;transform:translateY(-6px) scale(.98)}to{opacity:1;transform:none}}
+.dd__list[hidden]{display:none}
+.dd__opt{
+  display:block;width:100%;text-align:left;
+  background:none;border:0;border-left:2px solid transparent;border-radius:8px;
+  padding:9px 11px;cursor:pointer;
+  transition:background .2s,border-color .2s;
+}
+.dd__opt:hover{background:rgba(255,255,255,.035)}
+.dd__opt.is-sel{background:var(--gold-soft);border-left-color:var(--gold)}
+.dd__opt b{display:block;font-size:12.5px;font-weight:400;color:#ece7da;letter-spacing:.05em;text-transform:lowercase}
+.dd__opt.is-sel b{color:var(--gold-lift)}
+.dd__opt small{display:block;margin-top:3px;font-size:10px;color:var(--dim);letter-spacing:.04em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dd__opt:hover small{color:var(--muted)}
 .led{position:relative;flex:none;width:6px;height:6px;border-radius:50%;background:var(--gold);box-shadow:0 0 0 0 rgba(212,175,55,.55);animation:ping 2.4s ease-out infinite}
 .led--bad{background:var(--danger);box-shadow:0 0 0 0 rgba(226,105,95,.5)}
 .led--idle{background:var(--dim);animation:none;box-shadow:none}
@@ -508,9 +530,13 @@ kbd{
       <span class="pill pill--model" title="Pick the model Nova answers with">
         <span class="led" id="led"></span>
         <span class="pill__k">model</span>
-        <select class="pill__sel" id="modelSel" aria-label="Choose model">
-          <option value="">connecting…</option>
-        </select>
+        <span class="dd" id="modelDd">
+          <button class="dd__btn" id="modelBtn" type="button" aria-haspopup="listbox" aria-expanded="false">
+            <span id="modelName">connecting…</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <span class="dd__list" id="modelList" role="listbox" hidden></span>
+        </span>
       </span>
       <span class="pill pill--ctx" title="Messages sent per request (rolling window)">
         <span class="pill__k">ctx</span>
@@ -648,7 +674,7 @@ kbd{
   var river = $("river"), thread = $("thread"), emptyState = $("empty");
   var form = $("form"), input = $("input"), sendBtn = $("send"), haltBtn = $("halt");
   var jump = $("jump"), dock = $("dock");
-  var modelSel = $("modelSel"), led = $("led"), ctxEl = $("ctx"), upEl = $("uptime");
+  var modelDd = $("modelDd"), modelBtn = $("modelBtn"), modelName = $("modelName"), modelList = $("modelList"), led = $("led"), ctxEl = $("ctx"), upEl = $("uptime");
   var tRuntime = $("tRuntime"), tModel = $("tModel"), tBridge = $("tBridge");
 
   var reduceMotion = window.matchMedia &&
@@ -1078,39 +1104,90 @@ kbd{
     led.className = "led" + (state === "ok" ? "" : state === "bad" ? " led--bad" : " led--idle");
   }
 
-  function setModelSel(id, list) {
-    modelSel.innerHTML = "";
-    (list || []).forEach(function (m) {
-      var o = document.createElement("option");
-      o.value = m.alias;
-      o.textContent = m.alias;
-      o.title = m.id + (m.description ? " — " + m.description : "");
-      modelSel.appendChild(o);
-    });
-    if (id) {
-      var match = (list || []).filter(function (m) { return m.id === id; })[0];
-      if (match) modelSel.value = match.alias;
-    }
+  var modelCatalog = [];
+
+  function closeDd() {
+    modelList.hidden = true;
+    modelBtn.setAttribute("aria-expanded", "false");
   }
 
-  modelSel.addEventListener("change", function () {
-    var alias = modelSel.value;
+  modelBtn.addEventListener("click", function (e) {
+    e.stopPropagation();
+    if (modelList.hidden) {
+      modelList.hidden = false;
+      modelBtn.setAttribute("aria-expanded", "true");
+    } else {
+      closeDd();
+    }
+  });
+
+  document.addEventListener("click", function (e) {
+    if (!modelDd.contains(e.target)) closeDd();
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") closeDd();
+  });
+
+  function markSel(id) {
+    var found = null;
+    for (var i = 0; i < modelCatalog.length; i++) {
+      if (modelCatalog[i].id === id) { found = modelCatalog[i]; break; }
+    }
+    var btns = modelList.querySelectorAll(".dd__opt");
+    for (var j = 0; j < btns.length; j++) {
+      var on = found && btns[j].getAttribute("data-alias") === found.alias;
+      if (on) btns[j].classList.add("is-sel");
+      else btns[j].classList.remove("is-sel");
+    }
+    if (found) modelName.textContent = found.alias;
+  }
+
+  function switchModel(alias) {
     if (!alias) return;
+    modelName.textContent = "switching…";
     fetch("/model", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ alias: alias })
     }).then(function (r) { return r.json(); }).then(function (j) {
       if (j && j.model_id) {
+        markSel(j.model_id);
         tModel.textContent = j.model_id;
         setLed("ok");
+        systemNote("Now answering with " + j.model_id, false);
       } else if (j && j.error) {
         systemNote(j.error.message, false);
       }
     }).catch(function () {
       systemNote("Could not switch model. Bridge may be offline.", false);
     });
-  });
+  }
+
+  function setModelSel(id, list) {
+    modelCatalog = list || [];
+    modelList.innerHTML = "";
+    modelCatalog.forEach(function (m) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "dd__opt";
+      b.setAttribute("role", "option");
+      b.setAttribute("data-alias", m.alias);
+      var t = document.createElement("b");
+      t.textContent = m.alias;
+      var s = document.createElement("small");
+      s.textContent = m.id;
+      b.appendChild(t);
+      b.appendChild(s);
+      if (m.description) b.title = m.description;
+      b.addEventListener("click", function () {
+        closeDd();
+        switchModel(m.alias);
+      });
+      modelList.appendChild(b);
+    });
+    if (id) markSel(id);
+  }
 
   fetch("/models").then(function (r) {
     if (!r.ok) throw new Error("HTTP " + r.status);
@@ -1126,10 +1203,7 @@ kbd{
     setLed("ok");
   }).catch(function () {
     setModelSel("", []);
-    var ph = document.createElement("option");
-    ph.value = "";
-    ph.textContent = "bridge unreachable";
-    modelSel.appendChild(ph);
+    modelName.textContent = "bridge unreachable";
     tModel.textContent = "unavailable";
     tModel.className = "term__v term__v--warn";
     tRuntime.textContent = "degraded";
