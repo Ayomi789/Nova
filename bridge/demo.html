@@ -1189,10 +1189,14 @@ kbd{
     if (id) markSel(id);
   }
 
-  fetch("/models").then(function (r) {
+  var bootCtl = new AbortController();
+  var bootTimer = setTimeout(function () { try { bootCtl.abort(); } catch (e) {} }, 15000);
+
+  fetch("/models", { signal: bootCtl.signal }).then(function (r) {
     if (!r.ok) throw new Error("HTTP " + r.status);
     return r.json();
   }).then(function (d) {
+    clearTimeout(bootTimer);
     setModelSel(d && d.current, d && d.models);
     var id = d && d.current;
     if (!id) throw new Error("bridge returned no model_id");
