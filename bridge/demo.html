@@ -532,7 +532,7 @@ kbd{
         <span class="pill__k">model</span>
         <span class="dd" id="modelDd">
           <button class="dd__btn" id="modelBtn" type="button" aria-haspopup="listbox" aria-expanded="false">
-            <span id="modelName">connecting…</span>
+            <span id="modelName">nemotron</span>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
           </button>
           <span class="dd__list" id="modelList" role="listbox" hidden></span>
@@ -1106,6 +1106,13 @@ kbd{
 
   var modelCatalog = [];
 
+  var STATIC_MODELS = [
+    { alias: "nemotron", id: "nvidia/nemotron-3-super-120b-a12b", description: "NVIDIA Nemotron 3 Super, fast and reliable" },
+    { alias: "gpt-oss", id: "openai/gpt-oss-20b", description: "GPT OSS 20B" },
+    { alias: "glm", id: "z-ai/glm-5.3", description: "GLM 5.3 flagship" },
+    { alias: "glm-flash", id: "z-ai/glm-5.3-flash", description: "GLM 5.3 Flash, fast lightweight" }
+  ];
+
   function closeDd() {
     modelList.hidden = true;
     modelBtn.setAttribute("aria-expanded", "false");
@@ -1192,6 +1199,9 @@ kbd{
   var bootCtl = new AbortController();
   var bootTimer = setTimeout(function () { try { bootCtl.abort(); } catch (e) {} }, 15000);
 
+  /* Show known models instantly; the live fetch below confirms. */
+  setModelSel("nvidia/nemotron-3-super-120b-a12b", STATIC_MODELS);
+
   fetch("/models", { signal: bootCtl.signal }).then(function (r) {
     if (!r.ok) throw new Error("HTTP " + r.status);
     return r.json();
@@ -1206,7 +1216,8 @@ kbd{
     tBridge.textContent = "GET /models · 200";
     setLed("ok");
   }).catch(function () {
-    setModelSel("", []);
+    /* Keep the static list visible so names are never hidden;
+       only the label admits the bridge is unreachable. */
     modelName.textContent = "bridge unreachable";
     tModel.textContent = "unavailable";
     tModel.className = "term__v term__v--warn";
