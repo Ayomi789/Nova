@@ -383,6 +383,12 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 }
 .note__retry:hover{background:rgba(226,105,95,.14);color:#fff}
 
+/* informational note: gold, not danger-red */
+.note--info{border-color:var(--line-gold);background:var(--gold-soft)}
+.note--info .note__tag{color:var(--gold);border-color:var(--line-gold);font-style:normal}
+.note--info .note__txt{color:#d9d3c3}
+.note--info .note__txt b{color:var(--gold)}
+
 /* ---------- jump pill ---------- */
 .jump{
   position:absolute;left:50%;bottom:calc(var(--dock) + 16px);transform:translate(-50%,10px);
@@ -835,11 +841,11 @@ kbd{
     return bar;
   }
 
-  function systemNote(message, canRetry) {
-    var box = node("div", "note");
-    var tag = node("span", "note__tag", "!");
+  function systemNote(message, canRetry, kind) {
+    var box = node("div", "note" + (kind === "info" ? " note--info" : ""));
+    var tag = node("span", "note__tag", kind === "info" ? "i" : "!");
     var txt = node("div", "note__txt");
-    txt.appendChild(node("b", null, "System"));
+    txt.appendChild(node("b", null, kind === "info" ? "Nova" : "System"));
     txt.appendChild(document.createTextNode(message));
     box.appendChild(tag); box.appendChild(txt);
 
@@ -1172,7 +1178,7 @@ kbd{
         markSel(j.model_id);
         tModel.textContent = j.model_id;
         setLed("ok");
-        systemNote("Now answering with " + j.model_id, false);
+        systemNote("Now answering with " + j.model_id, false, "info");
       } else if (j && j.error) {
         modelName.textContent = prev;
         systemNote(j.error.message, false);
