@@ -483,7 +483,11 @@ DEMO_FILE = (
 RATE_LIMIT = 30
 RATE_WINDOW = 600.0
 
+MODEL_RATE_LIMIT = 120
+MODEL_RATE_WINDOW = 600.0
+
 _rate_bucket = {}
+_model_bucket = {}
 
 
 def _rate_ok(ip):
@@ -501,6 +505,25 @@ def _rate_ok(ip):
 
     hits.append(now)
     _rate_bucket[ip] = hits
+
+    return True
+
+
+def _model_rate_ok(ip):
+    now = time.time()
+
+    hits = [
+        t
+        for t in _model_bucket.get(ip, [])
+        if now - t < MODEL_RATE_WINDOW
+    ]
+
+    if len(hits) >= MODEL_RATE_LIMIT:
+        _model_bucket[ip] = hits
+        return False
+
+    hits.append(now)
+    _model_bucket[ip] = hits
 
     return True
 
@@ -571,7 +594,7 @@ async def switch_model(request: Request):
         else "unknown"
     )
 
-    if not _rate_ok(client_ip):
+    if not _model_rate_ok(client_ip):
         return JSONResponse(
             status_code=429,
             content={
