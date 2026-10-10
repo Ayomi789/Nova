@@ -11,4 +11,4 @@ services:
       - key: NVIDIA_API_KEY
         sync: false
       - key: NOVA_MODEL
-        value: stepfun-ai/step-3.7-flash
+        value: nvidia/nemotron-3-super-120b-a12b

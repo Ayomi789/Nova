@@ -707,13 +707,14 @@ def sse(event, data):
     )
 
 
-# Measured reliability order from cache/benchmark.json:
-# nemotron 100%, minimax 100%, step 96%, deepseek-flash 73%.
+# Verified alive 2026-08-24 by direct probe:
+# nemotron-3 ~1s, gpt-oss-20b ~11s, glm-5.3 ~5s, glm-5.3-flash ~19s.
+# Retired (HTTP 410): step, nemotron-old, minimax, deepseek-v4-flash.
 FAILOVER_ALIASES = [
     "nemotron",
-    "minimax",
-    "step",
-    "deepseek-flash",
+    "gpt-oss",
+    "glm",
+    "glm-flash",
 ]
 
 
