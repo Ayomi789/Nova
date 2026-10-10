@@ -125,7 +125,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .pill--model{border-color:var(--line-gold);background:var(--gold-soft);color:#dcd0ab}
 .pill__k{color:var(--dim);letter-spacing:.2em}
 .pill__v{color:var(--gold-lift);overflow:hidden;text-overflow:ellipsis;max-width:min(42vw,270px)}
-.dd{position:relative;display:inline-flex;min-width:0}
+.dd{position:relative;display:inline-flex;min-width:0;pointer-events:auto}
 .dd__btn{
   display:inline-flex;align-items:center;gap:6px;
   background:none;border:0;cursor:pointer;padding:0;
@@ -141,7 +141,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   background:linear-gradient(180deg,#15151c,#0e0e13);
   border:1px solid var(--line-gold);border-radius:13px;padding:6px;
   box-shadow:0 30px 70px -20px rgba(0,0,0,.95),0 0 0 1px rgba(0,0,0,.5),0 0 32px -12px rgba(212,175,55,.4);
-  z-index:60;
+  z-index:60;pointer-events:auto;
   animation:ddIn .22s cubic-bezier(.16,.84,.24,1) both;
 }
 @keyframes ddIn{from{opacity:0;transform:translateY(-6px) scale(.98)}to{opacity:1;transform:none}}
@@ -149,9 +149,12 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .dd__opt{
   display:block;width:100%;text-align:left;
   background:none;border:0;border-left:2px solid transparent;border-radius:8px;
-  padding:9px 11px;cursor:pointer;
-  transition:background .2s,border-color .2s;
+  padding:9px 11px;cursor:pointer;pointer-events:auto;
+  transition:background .2s,border-color .2s,transform .1s;
+  -webkit-tap-highlight-color:rgba(212,175,55,.25);
 }
+.dd__opt:hover{background:rgba(255,255,255,.035)}
+.dd__opt:active{background:var(--gold-soft);transform:scale(.985)}
 .dd__opt:hover{background:rgba(255,255,255,.035)}
 .dd__opt.is-sel{background:var(--gold-soft);border-left-color:var(--gold)}
 .dd__opt b{display:block;font-size:12.5px;font-weight:400;color:#ece7da;letter-spacing:.05em;text-transform:lowercase}
@@ -1187,6 +1190,15 @@ kbd{
     }
   }
 
+  /* Delegated: one listener on the list survives any rebuild. */
+  modelList.addEventListener("click", function (e) {
+    var b = e.target && e.target.closest ? e.target.closest(".dd__opt") : null;
+    if (!b || !modelList.contains(b)) return;
+    var alias = b.getAttribute("data-alias");
+    closeDd();
+    switchModel(alias);
+  });
+
   function setModelSel(id, list) {
     modelCatalog = list || [];
     modelList.innerHTML = "";
@@ -1203,10 +1215,6 @@ kbd{
       b.appendChild(t);
       b.appendChild(s);
       if (m.description) b.title = m.description;
-      b.addEventListener("click", function () {
-        closeDd();
-        switchModel(m.alias);
-      });
       modelList.appendChild(b);
     });
     if (id) markSel(id);
