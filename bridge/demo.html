@@ -125,6 +125,17 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .pill--model{border-color:var(--line-gold);background:var(--gold-soft);color:#dcd0ab}
 .pill__k{color:var(--dim);letter-spacing:.2em}
 .pill__v{color:var(--gold-lift);overflow:hidden;text-overflow:ellipsis;max-width:min(42vw,270px)}
+.pill__sel{
+  appearance:none;-webkit-appearance:none;
+  background:transparent;border:0;color:var(--gold-lift);
+  font:inherit;letter-spacing:.12em;text-transform:uppercase;font-size:10px;
+  max-width:min(42vw,270px);text-overflow:ellipsis;overflow:hidden;
+  cursor:pointer;padding-right:12px;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5'%3E%3Cpath d='M1 1l3 3 3-3' fill='none' stroke='%23d4af37' stroke-width='1.4'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right center;
+}
+.pill__sel:focus{outline:none}
+.pill__sel option{background:#121218;color:#e8e6e1;text-transform:none;letter-spacing:normal}
 .led{position:relative;flex:none;width:6px;height:6px;border-radius:50%;background:var(--gold);box-shadow:0 0 0 0 rgba(212,175,55,.55);animation:ping 2.4s ease-out infinite}
 .led--bad{background:var(--danger);box-shadow:0 0 0 0 rgba(226,105,95,.5)}
 .led--idle{background:var(--dim);animation:none;box-shadow:none}
@@ -494,10 +505,12 @@ kbd{
     <div class="hdr__spacer"></div>
 
     <div class="hdr__meta">
-      <span class="pill pill--model" title="Model resolved live from GET /bridge">
+      <span class="pill pill--model" title="Pick the model Nova answers with">
         <span class="led" id="led"></span>
         <span class="pill__k">model</span>
-        <span class="pill__v" id="modelId">connecting…</span>
+        <select class="pill__sel" id="modelSel" aria-label="Choose model">
+          <option value="">connecting…</option>
+        </select>
       </span>
       <span class="pill pill--ctx" title="Messages sent per request (rolling window)">
         <span class="pill__k">ctx</span>
@@ -635,7 +648,7 @@ kbd{
   var river = $("river"), thread = $("thread"), emptyState = $("empty");
   var form = $("form"), input = $("input"), sendBtn = $("send"), haltBtn = $("halt");
   var jump = $("jump"), dock = $("dock");
-  var modelEl = $("modelId"), led = $("led"), ctxEl = $("ctx"), upEl = $("uptime");
+  var modelSel = $("modelSel"), led = $("led"), ctxEl = $("ctx"), upEl = $("uptime");
   var tRuntime = $("tRuntime"), tModel = $("tModel"), tBridge = $("tBridge");
 
   var reduceMotion = window.matchMedia &&
@@ -1065,21 +1078,58 @@ kbd{
     led.className = "led" + (state === "ok" ? "" : state === "bad" ? " led--bad" : " led--idle");
   }
 
-  fetch(BRIDGE).then(function (r) {
+  function setModelSel(id, list) {
+    modelSel.innerHTML = "";
+    (list || []).forEach(function (m) {
+      var o = document.createElement("option");
+      o.value = m.alias;
+      o.textContent = m.alias;
+      o.title = m.id + (m.description ? " — " + m.description : "");
+      modelSel.appendChild(o);
+    });
+    if (id) {
+      var match = (list || []).filter(function (m) { return m.id === id; })[0];
+      if (match) modelSel.value = match.alias;
+    }
+  }
+
+  modelSel.addEventListener("change", function () {
+    var alias = modelSel.value;
+    if (!alias) return;
+    fetch("/model", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ alias: alias })
+    }).then(function (r) { return r.json(); }).then(function (j) {
+      if (j && j.model_id) {
+        tModel.textContent = j.model_id;
+        setLed("ok");
+      } else if (j && j.error) {
+        systemNote(j.error.message, false);
+      }
+    }).catch(function () {
+      systemNote("Could not switch model. Bridge may be offline.", false);
+    });
+  });
+
+  fetch("/models").then(function (r) {
     if (!r.ok) throw new Error("HTTP " + r.status);
     return r.json();
   }).then(function (d) {
-    var id = d && (d.model_id != null ? d.model_id : d.model);
+    setModelSel(d && d.current, d && d.models);
+    var id = d && d.current;
     if (!id) throw new Error("bridge returned no model_id");
     id = String(id);
-    modelEl.textContent = id;
     tModel.textContent = id;
     tRuntime.textContent = "online";
-    tBridge.textContent = "GET /bridge · 200";
+    tBridge.textContent = "GET /models · 200";
     setLed("ok");
   }).catch(function () {
-    modelEl.textContent = "bridge unreachable";
-    modelEl.title = "GET /bridge did not return a usable model_id";
+    setModelSel("", []);
+    var ph = document.createElement("option");
+    ph.value = "";
+    ph.textContent = "bridge unreachable";
+    modelSel.appendChild(ph);
     tModel.textContent = "unavailable";
     tModel.className = "term__v term__v--warn";
     tRuntime.textContent = "degraded";

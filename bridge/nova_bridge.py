@@ -542,6 +542,94 @@ async def bridge_info():
     }
 
 
+@app.get("/models")
+async def list_models():
+    try:
+        models = load_models()["models"]
+    except Exception:
+        models = {}
+
+    return {
+        "current": bridge_config.get("model_id"),
+        "models": [
+            {
+                "alias": alias,
+                "id": info.get("id"),
+                "description": info.get("description", ""),
+            }
+            for alias, info in models.items()
+            if info.get("id")
+        ],
+    }
+
+
+@app.post("/model")
+async def switch_model(request: Request):
+    client_ip = (
+        request.client.host
+        if request.client
+        else "unknown"
+    )
+
+    if not _rate_ok(client_ip):
+        return JSONResponse(
+            status_code=429,
+            content={
+                "type": "error",
+                "error": {
+                    "type": "rate_limit_error",
+                    "message": "Rate limit reached. Try again in a few minutes.",
+                },
+            },
+        )
+
+    try:
+        data = await request.json()
+    except Exception:
+        return JSONResponse(
+            status_code=400,
+            content={
+                "type": "error",
+                "error": {
+                    "type": "invalid_request",
+                    "message": "Invalid JSON.",
+                },
+            },
+        )
+
+    alias = (data.get("alias") or "").strip().lower()
+
+    try:
+        models = load_models()["models"]
+    except Exception:
+        models = {}
+
+    info = models.get(alias)
+
+    if not info or not info.get("id"):
+        return JSONResponse(
+            status_code=400,
+            content={
+                "type": "error",
+                "error": {
+                    "type": "invalid_request",
+                    "message": (
+                        "Unknown model alias. "
+                        "GET /models for options."
+                    ),
+                },
+            },
+        )
+
+    bridge_config["model_id"] = info["id"]
+    bridge_config["model_alias"] = alias
+
+    return {
+        "model_id": info["id"],
+        "model_alias": alias,
+    }
+
+
 @app.post("/shutdown")
 async def shutdown():
     threading.Thread(target=_exit_later, daemon=True).start()
