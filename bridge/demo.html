@@ -1152,23 +1152,39 @@ kbd{
 
   function switchModel(alias) {
     if (!alias) return;
-    modelName.textContent = "switching…";
+    var prev = modelName.textContent;
+    modelName.textContent = alias;
+    markSelByAlias(alias);
     fetch("/model", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ alias: alias })
-    }).then(function (r) { return r.json(); }).then(function (j) {
+    }).then(function (r) {
+      if (!r.ok) throw new Error("HTTP " + r.status);
+      return r.json();
+    }).then(function (j) {
       if (j && j.model_id) {
+        if (j.model_alias) modelName.textContent = j.model_alias;
         markSel(j.model_id);
         tModel.textContent = j.model_id;
         setLed("ok");
         systemNote("Now answering with " + j.model_id, false);
       } else if (j && j.error) {
+        modelName.textContent = prev;
         systemNote(j.error.message, false);
       }
     }).catch(function () {
+      modelName.textContent = prev;
       systemNote("Could not switch model. Bridge may be offline.", false);
     });
+  }
+
+  function markSelByAlias(alias) {
+    var btns = modelList.querySelectorAll(".dd__opt");
+    for (var j = 0; j < btns.length; j++) {
+      if (btns[j].getAttribute("data-alias") === alias) btns[j].classList.add("is-sel");
+      else btns[j].classList.remove("is-sel");
+    }
   }
 
   function setModelSel(id, list) {
